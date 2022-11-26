@@ -35,5 +35,3 @@ gem "http_parser.rb", "~> 0.6.0", :platforms => [:jruby]
 
 gem "jekyll-theme-console"
 gem "jekyll-tagging"
-
-gem "jekyll-include-cache"
