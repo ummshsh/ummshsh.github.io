@@ -5,4 +5,4 @@ tags: intro
 title: Hello world
 permalink: /:day-:month-:year-:title
 ---
-![Another one](/assets/images/telegram.jpg)
+![Another one](/assets/images/telegram.jpg)  
