@@ -14,7 +14,7 @@ source "https://rubygems.org"
 gem "github-pages", "~> 223"
 gem "jekyll-include-cache"
 # If you have any plugins, put them here!
-gem "jekyll-theme-console"
+gem 'jekyll-theme-console', '~> 0.4.0'
 # gem "minima", "~> 2.5"
 gem "jekyll-feed", "~> 0.12"
 gem "jekyll-tagging"
