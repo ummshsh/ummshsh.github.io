@@ -28,7 +28,8 @@ url: "" # the base hostname & protocol for your site, e.g. http://example.com
 github_username: ummshsh
 
 # Build settings
-theme: jekyll-theme-console
+# theme: jekyll-theme-console
+theme: minima
 plugins:
   - jekyll-feed
   - jekyll-feed
