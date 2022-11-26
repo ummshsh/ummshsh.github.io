@@ -19,26 +19,21 @@
 # in the templates via {{ site.myvariable }}.
 
 title: bLOG
-#email: your-email@example.com
+# email: your-email@example.com
 description: >- # this means to ignore newlines until "baseurl:"
-  Content consumer blog
+  dummy description
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "" # the base hostname & protocol for your site, e.g. http://example.com
-# twitter_username: 
-github_username: ummshsh
+# twitter_username: jekyllrb
+# github_username:  jekyll
 
 # Build settings
-theme: jekyll-theme-console
-# theme: minima
+theme: minima
 plugins:
   - jekyll-feed
-  - jekyll-feed
 
-header_pages:
-  - index.markdown
-  - about.markdown
-
-permalink: /:year/:month/:day/:title:output_ext
+minima:
+  skin: dark
 
 # Exclude from processing.
 # The following items will not be processed, by default.
@@ -59,9 +54,3 @@ permalink: /:year/:month/:day/:title:output_ext
 #   - vendor/cache/
 #   - vendor/gems/
 #   - vendor/ruby/
-
-
-# Tag plugin config
-tag_page_layout: tag_page
-tag_page_dir: tag
-tag_permalink_style: pretty

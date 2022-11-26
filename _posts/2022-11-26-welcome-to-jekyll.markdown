@@ -1,12 +1,8 @@
 ---
 layout: post
-title:  "Welcome to Jekyll"
-date:   2022-11-24 17:22:44 +0300
-#categories: jekyll update
-tags: exampleTag
-#permalink: /:categories/:day/:month/:year/:title
-#date:   2022-11-24 17:22:34 +0300
-published: false
+title:  "Welcome to Jekyll!"
+date:   2022-11-26 22:00:17 +0200
+categories: jekyll update
 ---
 You’ll find this post in your `_posts` directory. Go ahead and edit it and re-build the site to see your changes. You can rebuild the site in many different ways, but the most common way is to run `jekyll serve`, which launches a web server and auto-regenerates your site when a file is updated.
 
