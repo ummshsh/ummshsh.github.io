@@ -31,6 +31,8 @@ github_username: ummshsh
 theme: jekyll-theme-console
 plugins:
   - jekyll-feed
+  - jekyll-feed
+  - jekyll-include-cache
 
 header_pages:
   - index.markdown
