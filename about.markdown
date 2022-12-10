@@ -4,6 +4,7 @@ title: /about
 permalink: /about/
 ---
 Content consumer blog with accidental shitpost, sorry  
+RU\EN
 
 
 [RSS](/feed.xml)  

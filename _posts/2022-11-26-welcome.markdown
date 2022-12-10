@@ -1,7 +1,0 @@
----
-layout: post
-title:  "Welcome to Jekyll"
-tags: intro
-title: Hello world
----
-![Another one](/assets/images/telegram.jpg)  
