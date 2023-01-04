@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Творческий метод"
-tags: quotes
+tags: quotes muzprosvet
 ---
 <em>С сайта [Muzprosvet](https://www.muzprosvet.ru/dj.html) </em>
 
