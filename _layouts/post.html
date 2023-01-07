@@ -4,7 +4,7 @@ layout: default
 <h1>
     {%- assign date_format = "%b %-d, %Y" -%}
     {{ page.title}}
-    </br>
+    <br>
     <span class="post-meta">{{ page.date | date: date_format }}</span>
 </h1>
 {% if page.tags.size > 0 %}
@@ -15,6 +15,6 @@ layout: default
         {% endif %}
     {%- endfor -%}
 {% endif %}
-</br>
-</br>
+<br>
+<br>
 {{ content }}

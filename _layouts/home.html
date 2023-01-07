@@ -10,7 +10,7 @@ layout: default
       <a class="post-link" href="{{ post.url | relative_url }}">
         {{ post.title | escape }}
       </a>
-      </br>
+      <br>
       <span class="post-meta">{{ post.date | date: date_format }}</span>
     </h1>
     {% if post.tags.size > 0 %}
@@ -21,15 +21,15 @@ layout: default
         {% endif %}
       {%- endfor -%}
     {% endif %}
-    </br>
-    </br>
+    <br>
+    <br>
     {% if post.content contains site.excerpt_separator %}
     {{ post.excerpt }} <a href="{{ post.url }}">[Read more]</a>
-    </br>
+    <br>
     {% else %}
     {{ post.content }}
     {% endif %}
-    </br>
+    <br>
   </li>
   {%- endfor -%}
 </ul>
