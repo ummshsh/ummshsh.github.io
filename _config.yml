@@ -67,3 +67,6 @@ tag_page_dir: tag
 tag_permalink_style: pretty
 
 excerpt_separator: <!--more-->
+
+style: dark #light\hacker
+listen_for_clients_preferred_style: true

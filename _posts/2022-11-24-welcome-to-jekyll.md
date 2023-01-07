@@ -1,7 +1,7 @@
 ---
 layout: post
-title:  "Welcome to Jekyll"
-date:   2022-11-24 17:22:44 +0300
+title: "Welcome to Jekyll"
+date: 2022-11-24 17:22:44 +0300
 #categories: jekyll update
 tags: exampleTag
 #permalink: /:categories/:day/:month/:year/:title
