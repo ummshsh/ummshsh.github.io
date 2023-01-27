@@ -3,14 +3,14 @@ layout: post
 title: Using proxy with Selenium to modify browser requests
 tags: c# autotests senelum proxy headers
 ---
-# Problem
 I know Puppeteer can do this out of the box, but what if you stuck with Selenium for some reason and you need to read or modify your request headers?
 
 <!--more-->
+# Why
 This might be usefull for testing purpouses, for example when you want to test localization and pass something other than `ACCEPT-LANGUAGE: en-US,en;q=0.5`  
 So how to do it?
 
-# Solution
+# How
 For this we will use proxy, I went with [Titanium proxy](https://github.com/justcoding121/titanium-web-proxy).  
 The idea is to catch requests from browser modify them in proxy and then let requests out.
 
