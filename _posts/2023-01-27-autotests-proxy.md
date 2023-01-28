@@ -60,15 +60,15 @@ This class allows you to set this proxy System-wide, and proxy will be set in Wi
 WebDriver can be started with options, and Options is where I will set proxy, but before that let's configure proxy first.
  
 ## Setup proxy
-Start titanium proxy with any port..
+Start titanium proxy with any port...
 ```c#
 var autotestsProxy = new AutotestsProxy(false, 501153);
 ```
-.. and subscribe to one of the events
+...and subscribe to one of the events
 ```c#
 autotestsProxy.ProxyServer.BeforeRequest += BeforeRequest;
 ```
-...and lets create `BeforeRequest` method that will actually add headers or do whatever you like. Here I just adding custom header to every request.
+Lets create `BeforeRequest` method that will actually add headers or do whatever you like. Here, I just added my custom header to every request.
 ```c#
 private async Task BeforeRequest(object sender, SessionEventArgs e)
 {
@@ -84,8 +84,6 @@ AddCertificateToSystem("rootCert.pfx", "certificatePassword");
 autotestsProxy.ProxyServer.CertificateManager.RootCertificate = certificate;
 autotestsProxy.ProxyServer.CertificateManager.EnsureRootCertificate();
 ```
-Here I just added certificate to the system programmatically, this require elevated priveleges. You can do this manually before running this code.  
-
 Here is how `AddCertificateToSystem()` looks like(True only for Windows)  
 ```c#
 private void AddCertificateToSystem(string pathToCertificate, string certPassword)
@@ -101,6 +99,9 @@ private void AddCertificateToSystem(string pathToCertificate, string certPasswor
     Process.Start(startInfo).WaitForExit();
 }
 ```
+Here I just added certificate to the system programmatically, this require elevated priveleges. You can do this manually before running this code.  
+
+
 ## Use proxy in WebDriver
 For this I need to create driver options of your choice and add proxy address, then jsut pass options to driver constructor.  
 ```c#
