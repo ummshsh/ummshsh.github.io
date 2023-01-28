@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Using proxy with Selenium to modify browser requests
-tags: c# autotests senelum proxy headers
+tags: c# autotests selenium proxy headers
 ---
 I know Puppeteer can do this out of the box, but what if you stuck with Selenium for some reason and you need to read or modify your request headers?
 <!--more-->
