@@ -35,8 +35,8 @@ footer { color: var(--text-color);  border-bottom: var(--border); margin: 20px a
 header { margin-top: 25px;  margin-bottom: 10px; }
 header p { text-align: left;  margin: 0; }
 footer { margin-bottom: 20px; }
-.giscus, .giscus-frame {    width: 100%;  }
-.giscus-frame {    border: none;  }
+.giscus, .giscus-frame { width: 100%;}
+.giscus-frame { border: none; }
 
 /**
  * Highlight/Markup
