@@ -159,7 +159,7 @@
       --color-fg-default: #c9d1d9;
       --color-fg-muted: #8b949e;
       --color-fg-subtle: #484f58;
-      --color-canvas-default: transparent;
+      --color-canvas-default: #000000;
       --color-canvas-overlay: #161b22;
       --color-canvas-inset: transparent;
       --color-canvas-subtle: transparent;
