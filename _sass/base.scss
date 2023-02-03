@@ -58,7 +58,7 @@ header p { text-align: left;  margin: 0; }
 .menu ul li { display: inline;  margin-left: 10px; }
 .menu ul li a { text-decoration: none;  color: var(--text-color); }
 .menu ul li a:hover { text-decoration: none; color: var(--background-color); background-color: var(--base-color); }
-h1 a:hover, h2 a:hover, h3 a:hover, h4 a:hover, h5 a:hover, h6 a:hover { background-color: var(--background-color); }
+h1 a.headerAnchor:hover, h2 a.headerAnchor:hover, h3 a.headerAnchor:hover, h4 a.headerAnchor:hover, h5 a.headerAnchor:hover, h6 a.headerAnchor:hover { background-color: var(--background-color); }
 
 
 /**
