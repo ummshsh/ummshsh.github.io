@@ -6,10 +6,11 @@
  */
 $base-font-family: 'Source Code Pro', monospace !default;
 $base-font-size: 0.9em !default;
-$header-font-size: 1em !default;
-$post-header-font-size: 1.5em !default;
+$header-font-size-h1: 1.5em !default;
+$header-font-size: 1.5em !default;
+$post-header-font-size: 2em !default;
 $mobile-font-size: 0.9em !default;
-$mobile-post-header-font-size: 1.5em !default;
+$mobile-post-header-font-size: 2em !default;
 $base-line-height: 1.5 !default;
 $container-width: 90% !default;
 $container-max-width: 600px !default;
@@ -17,17 +18,18 @@ $container-max-width: 600px !default;
 /**
  * Global
  */
-img {max-width: 100%}
+img { max-width: 100% }
 body { background-color: var(--background-color);  margin: 0 auto;  padding: 0;  font-family: $base-font-family;  font-size: $base-font-size;  color: var(--text-color);  text-align: left;  line-height: $base-line-height !important; }
-h1 { font-size: $header-font-size; padding-bottom: 10px; margin: 0px;  margin-top: 22px;  font-weight: bold;  color: var(--text-color); }
-h2, h3, h4, h5, h6 {padding-bottom: 10px; font-size: $base-font-size;  margin: 0px;  margin-top: 22px;  font-weight: bold;  color: var(--text-color); }
+h1 { font-size: $header-font-size-h1; margin: 0px;  margin-top: 22px;  font-weight: bold;  color: var(--text-color); }
+h2, h3, h4, h5, h6 {padding-bottom: 10px; font-size: $header-font-size;  margin: 0px;  margin-top: 22px;  font-weight: bold;  color: var(--text-color); }
 p, ul, ol { margin: 0px;  color: var(--text-color); font-size: 1em; }
 a { text-decoration: underline;  color: var(--link-color); }
 a:hover { color: var(--background-color); background-color: var(--base-color); }
 @media only screen and (max-device-width: 300px) { *:not(h1) { font-size: $mobile-font-size !important; } }
-@media only screen and (max-device-width: 500px) { h1 { font-size: $header-font-size !important; } }
-.postHeader { font-size: $post-header-font-size;}
+@media only screen and (max-device-width: 500px) { h1 { font-size: $header-font-size-h1 !important; } }
+.postHeader { font-size: $post-header-font-size !important;}
 @media only screen and (max-device-width: 500px) { .postHeader { font-size: $mobile-post-header-font-size !important; } }
+.post-meta { margin-top: 22px; }
 
 /**
  * Layout
@@ -64,6 +66,9 @@ iframe { width: 100%;}
 .menu ul li a { text-decoration: none;  color: var(--text-color); }
 .menu ul li a:hover { text-decoration: none; color: var(--background-color); background-color: var(--base-color); }
 h1 a.headerAnchor:hover, h2 a.headerAnchor:hover, h3 a.headerAnchor:hover, h4 a.headerAnchor:hover, h5 a.headerAnchor:hover, h6 a.headerAnchor:hover { background-color: var(--background-color); }
+
+h1 a.headerAnchor,h2 a.headerAnchor,h3 a.headerAnchor,h4 a.headerAnchor,h5 a.headerAnchor,h6 a.headerAnchor {visibility: hidden;}
+h1:hover a.headerAnchor,h2:hover a.headerAnchor,h3:hover a.headerAnchor,h4:hover a.headerAnchor,h5:hover a.headerAnchor,h6:hover a.headerAnchor{visibility: visible !important;}
 
 
 /**

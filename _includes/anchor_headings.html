@@ -56,7 +56,7 @@
 
   {% assign minHeader = include.h_min | default: 1 %}
   {% assign maxHeader = include.h_max | default: 6 %}
-  {% assign beforeHeading = true %}
+  {% assign beforeHeading = false %}
   {% assign headerAttrs = include.headerAttrs %}
   {% assign nodes = include.html | split: '<h' %}
 
