@@ -4,13 +4,15 @@
 /**
  * Style variables
  */
-$base-font-family:     'Source Code Pro', monospace !default;
-$base-font-size:       0.9em !default;
-$header-font-size:     1em !default;
-$mobile-font-size:     0.9em !default;
-$base-line-height:     1.5 !default;
-$container-width:      90% !default;
-$container-max-width:  600px !default;
+$base-font-family: 'Source Code Pro', monospace !default;
+$base-font-size: 0.9em !default;
+$header-font-size: 1em !default;
+$post-header-font-size: 1.5em !default;
+$mobile-font-size: 0.9em !default;
+$mobile-post-header-font-size: 1.5em !default;
+$base-line-height: 1.5 !default;
+$container-width: 90% !default;
+$container-max-width: 600px !default;
 
 /**
  * Global
@@ -24,6 +26,8 @@ a { text-decoration: underline;  color: var(--link-color); }
 a:hover { color: var(--background-color); background-color: var(--base-color); }
 @media only screen and (max-device-width: 300px) { *:not(h1) { font-size: $mobile-font-size !important; } }
 @media only screen and (max-device-width: 500px) { h1 { font-size: $header-font-size !important; } }
+.postHeader { font-size: $post-header-font-size;}
+@media only screen and (max-device-width: 500px) { .postHeader { font-size: $mobile-post-header-font-size !important; } }
 
 /**
  * Layout
@@ -36,6 +40,7 @@ header { margin-top: 25px;  margin-bottom: 10px; }
 header p { text-align: left;  margin: 0; }
 .giscus, .giscus-frame { width: 100%;}
 .giscus-frame { border: none; }
+iframe { width: 100%;}
 
 /**
  * Highlight/Markup
