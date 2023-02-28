@@ -12,7 +12,7 @@ tags: music mix
 
 [Тревор](https://www.discogs.com/artist/35609-Trevor-Jackson) и [Вадим](https://www.discogs.com/artist/1444-DJ-Vadim)(в его ранней форме) - это мужики, которые довольно сильно повлияли на мой(и моего мэна) музыкальный вкус, на меня в особенности Тревор и его ремиксы, они до сих пор ассоциируются с ночным Саратовом почему-то.
 
-Особенно этот трек, его нет в миксе. К сожалению, так работают винил миксы, если нет пласта, то не будет и трека.
+В часности этот трек, его нет в миксе. К сожалению, так работают винил миксы, если нет пласта, то не будет и трека.
 <iframe width="560" height="315" src="https://www.youtube.com/embed/R0OQ-ex1dXM" title="New Kingdom - Cheap Thrills (Underdog Remix)" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 
 
