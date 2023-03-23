@@ -36,3 +36,20 @@ tags: blog esotericism sci-fi
 Историчесикй контекст этой заметки: 2023, бум AI иструментов для всего, Midjourney 5, два дня назад вышел Chat-GPT4.
 
 Это я все к чему, что Стругацкие читаются сейчас как фентези, а дымные писания на санскрите как бла-бла эзотерика из Мудрости веков, но не обязательно ей являются. Тут в конце концов все зависит от интерпретатора.
+
+
+# Bonus track: Bing AI essay on connection of Sci-fi to The Markandeya Purana
+
+> Write me a 300 words essay about how The Markandeya Purana connected to science fiction
+
+Here is a 300 words essay about how The Markandeya Purana connected to science fiction:
+
+The Markandeya Purana is one of the oldest and most fascinating texts of Hinduism. It contains a variety of stories, myths, legends and metaphysical teachings that explore the nature of reality, the role of gods and goddesses, and the destiny of human beings12
+
+One of the most remarkable features of The Markandeya Purana is its inclusion of the Devi Mahatmya, also known as Chandi or Durga Saptashati. This is a hymn that celebrates the supreme power and glory of Devi, the Goddess who creates and destroys everything in the universe13 The Devi Mahatmya is considered as one of the earliest and most influential texts of Shaktism, a Hindu tradition that worships Devi as the ultimate reality34
+
+The Devi Mahatmya also contains some elements that can be seen as precursors or inspirations for science fiction. For instance, it describes how Devi manifests herself in various forms to fight against different demons who threaten to overthrow the cosmic order. Some of these forms are hybrid creatures that combine human and animal features, such as Mahishasura (the buffalo demon), Raktabija (the blood-seed demon), Shumbha and Nishumbha (the twin demons), Chanda and Munda (the fierce-faced demons), etc. These forms can be compared to some modern science fiction characters who undergo genetic mutations or transformations due to scientific experiments or alien influences.
+
+Another example is how Devi uses her divine weapons and powers to defeat her enemies. She wields a trident, a discus, a sword, a bow and arrows, a thunderbolt, a net, a noose, etc., each with its own symbolic meaning and function. She also displays her ability to fly, change her size and shape, create illusions, control minds, etc. These weapons and powers can be seen as analogous to some futuristic gadgets or technologies that are used by science fiction heroes or villains to achieve their goals or overcome their challenges.
+
+Thus, The Markandeya Purana can be regarded as an ancient text that contains some elements that resonate with modern science fiction genres. It shows how Hindu mythology has always been imaginative and creative in exploring the mysteries of existence and expressing them through stories that appeal to human emotions and intellect.
