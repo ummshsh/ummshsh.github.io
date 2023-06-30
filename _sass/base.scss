@@ -30,6 +30,7 @@ a:hover { color: var(--background-color); background-color: var(--base-color); }
 .postHeader { font-size: $post-header-font-size !important;}
 @media only screen and (max-device-width: 500px) { .postHeader { font-size: $mobile-post-header-font-size !important; } }
 .post-meta { margin-top: 22px; }
+code.language-plaintext {font-size: 1.3em; color: var(--code-color-16);}
 
 /**
  * Layout
