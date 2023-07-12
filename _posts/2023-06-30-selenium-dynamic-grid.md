@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "How to run C# tests in Selenium dynamic grid inside GitLab"
+title: "How to run C# tests using Selenium dynamic grid inside GitLab"
 tags: c# autotests selenium GitLab tutorial
 ---
 Here is how you can start C# tests in GitLab environment using Selenium [Dynamic Grid](https://github.com/SeleniumHQ/docker-selenium#dynamic-grid) feature. 
