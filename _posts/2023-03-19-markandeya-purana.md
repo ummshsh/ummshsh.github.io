@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "The Markandeya Purana"
-tags: blog esotericism sci-fi
+tags: blog esotericism sci-fi ru
 ---
 Привет, владельцам статических сайтов! Обожаю их, кстати говоря, но заметка не об этом.
 

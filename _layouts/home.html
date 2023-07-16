@@ -1,10 +1,10 @@
 ---
 layout: default
 ---
-{%- if site.posts.size > 0 -%}
+<!-- This loops through the paginated posts -->
 <ul class="post-list">
-  {%- for post in site.posts -%}
-  {%- assign date_format = "%b %-d, %Y" -%}
+{% for post in paginator.posts %}
+  {%- assign date_format = "%b %-d, %Y" -%}  
   <li>
     <h1 class="postHeader">
       <a class="post-link" href="{{ post.url | relative_url }}">
@@ -30,6 +30,18 @@ layout: default
     {% endif %}
     <br>
   </li>
-  {%- endfor -%}
+  {% endfor %}
 </ul>
-{%- endif -%}
+
+<!-- Pagination links -->
+<div class="pagination">
+  {% for page in (1..paginator.total_pages) %}
+    {% if page == paginator.page %}
+      [ {{ page }} ]
+    {% elsif page == 1 %}
+      <a href="{{ '/' | relative_url }}">{{ page }}</a>
+    {% else %}
+      <a href="{{ site.paginate_path | relative_url | replace: ':num', page }}">{{ page }}</a>
+    {% endif %}
+  {% endfor %}
+</div>
