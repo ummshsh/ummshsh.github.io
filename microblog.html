@@ -1,0 +1,12 @@
+---
+layout: default
+title: Microblog
+permalink: /microblog.html
+---
+{% assign sorted = site.microblog | sort: 'date' | reverse  %}
+{% for post in sorted %}
+    {%- assign date_format = "%b %-d, %Y" -%}
+    <a class="post-meta" href="{{post.url}}">{{ post.date | date: date_format }}</a>
+    <span class="micropost">{{post.content}}</span>
+    <br>
+{% endfor %}

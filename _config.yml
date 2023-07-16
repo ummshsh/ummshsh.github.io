@@ -74,3 +74,14 @@ listen_for_clients_preferred_style: true
 
 paginate: 10
 paginate_path: "/page:num/"
+
+collections:
+  microblog:
+    output: true
+
+defaults:
+  - scope:
+      path: ""
+      type: "microblog"
+    values:
+      layout: "micropost"

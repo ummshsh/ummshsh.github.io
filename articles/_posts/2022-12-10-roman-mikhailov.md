@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Изнанка крысы. Роман Михайлов"
-tags: quotes
+tags: quotes ru
 ---
 <em>Просто цитаты без контекста</em>
 

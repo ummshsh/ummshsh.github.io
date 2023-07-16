@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Trevor Jackson X Vadim Peare vinyl mix"
-tags: music mix vinyl
+tags: music mix vinyl ru
 ---
 <iframe width="100%" height="166" scrolling="no" frameborder="no" allow="autoplay" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/1457738533&color=%2380ac70&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true"></iframe>
 
