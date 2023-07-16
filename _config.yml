@@ -32,7 +32,6 @@ theme: jekyll-theme-console
 # theme: minima
 plugins:
   - jekyll-feed
-  - jekyll-feed
   - jekyll-paginate
 
 header_pages:
@@ -85,3 +84,9 @@ defaults:
       type: "microblog"
     values:
       layout: "micropost"
+
+feed:
+  collections:
+    microblog:
+      path: "/microblog/feed.xml"
+      posts_limit: 50
