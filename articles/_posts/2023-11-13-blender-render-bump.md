@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Blender render dump"
-tags: b3d render
+tags: b3d render ru
 ---
 Я начал учить блендер и это весело!
 Еще в школе я делал какие-то штуки в фотошопе и корел дро, у меня даже сохранлось, не покажу)
