@@ -24,6 +24,7 @@ h1 { font-size: $header-font-size-h1; margin: 0px;  margin-top: 22px;  font-weig
 h2, h3, h4, h5, h6 {padding-bottom: 10px; font-size: $header-font-size;  margin: 0px;  margin-top: 22px;  font-weight: bold;  color: var(--text-color); }
 p, ul, ol { margin: 0px;  color: var(--text-color); font-size: 1em; }
 a { text-decoration: underline;  color: var(--link-color); }
+.menu a.logo:hover {text-decoration:none; background-color: transparent;}
 a:hover { color: var(--background-color); background-color: var(--base-color); }
 @media only screen and (max-device-width: 300px) { *:not(h1) { font-size: $mobile-font-size !important; } }
 @media only screen and (max-device-width: 500px) { h1 { font-size: $header-font-size-h1 !important; } }
@@ -33,7 +34,7 @@ a:hover { color: var(--background-color); background-color: var(--base-color); }
 code.language-plaintext {font-size: 1.3em; color: var(--code-color-16);}
 
 .pagination { text-align: center; padding-top: 1em; padding-bottom: 2em; }
-.micropost { font-size: 20px; }
+.micropost { font-size: 20px;}
 /**
  * Layout
  */
@@ -63,7 +64,8 @@ iframe { width: 100%;}
 /**
  * Header/Navigation
  */
-.menu { border-top: var(--border);  border-bottom: var(--border);  margin-bottom: 25px; }
+.menu { border-top: var(--border);  border-bottom: var(--border);  margin-bottom: 25px; padding-bottom: 20px;
+    padding-top: 20px; display: flex; justify-content:space-between; vertical-align:top; width: 100%;}
 .menu ul { margin-top: 12px;  margin-bottom: 12px;  padding-left: 0px;  list-style-type: none;  text-align: right; }
 .menu ul li { display: inline;  margin-left: 10px; }
 .menu ul li a { text-decoration: none;  color: var(--text-color); }

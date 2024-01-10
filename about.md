@@ -3,7 +3,6 @@ layout: page
 title: about
 permalink: /about/
 ---
-![Art](/assets/images/loves 4k transparent.png)
 shsh's blog with accidental shitpost, sorry  
 RU\EN
 
