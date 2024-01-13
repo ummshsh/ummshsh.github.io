@@ -16,7 +16,7 @@ group :jekyll_plugins do
   gem 'jekyll-theme-console', '~> 0.4.0'
   gem "jekyll-include-cache"
   # gem "minima", "~> 2.5"
-  gem "jekyll-feed", "~> 0.12"
+  # gem "jekyll-feed", "~> 0.12"
   gem "jekyll-tagging"
   gem 'jekyll-content-security-policy-generator'
   gem "jekyll-paginate"

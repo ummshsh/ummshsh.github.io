@@ -20,5 +20,5 @@ Base theme was taken from [Console theme](https://github.com/b2a3e8/jekyll-theme
 
 
 # RSS
-[RSS - articles](/feed.xml)
-[RSS - microblog](/microblog/feed.xml)
+[RSS - articles]({{"/feed.xml" | absolute_url}})
+[RSS - microblog]({{"/feed_microblog.xml" | absolute_url}})

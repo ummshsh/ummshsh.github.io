@@ -31,12 +31,11 @@ github_username: ummshsh
 theme: jekyll-theme-console
 # theme: minima
 plugins:
-  - jekyll-feed
   - jekyll-paginate
 
-header_pages:
-  - index.markdown
-  - about.markdown
+# header_pages:
+#   - index.markdown
+#   - about.markdown
 
 permalink: /:year-:month-:day-:title:output_ext
 
@@ -59,7 +58,6 @@ permalink: /:year-:month-:day-:title:output_ext
 #   - vendor/cache/
 #   - vendor/gems/
 #   - vendor/ruby/
-
 
 # Tag plugin config
 tag_page_layout: tag_page
@@ -84,9 +82,3 @@ defaults:
       type: "microblog"
     values:
       layout: "micropost"
-
-feed:
-  collections:
-    microblog:
-      path: "/microblog/feed.xml"
-      posts_limit: 50
