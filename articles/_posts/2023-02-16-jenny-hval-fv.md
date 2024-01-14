@@ -12,5 +12,5 @@ tags: music video ru
 Best served at night
 
 Еще, смешной коммент к одному из изданий Blood Bitch
-![Discogs Comment](/assets/images/jenny-hval-discogs-screen.png)  
+![Discogs Comment]({{site.url}}/assets/images/jenny-hval-discogs-screen.png)  
 Helpfull 👍

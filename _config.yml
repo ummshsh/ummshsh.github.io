@@ -23,7 +23,7 @@ title: shsh blog
 description: >- # this means to ignore newlines until "baseurl:"
   Content consumer blog
 baseurl: "/" # the subpath of your site, e.g. /blog
-url: "https://ummshsh.github.io/" # the base hostname & protocol for your site, e.g. http://example.com
+url: "https://ummshsh.github.io" # the base hostname & protocol for your site, e.g. http://example.com
 # twitter_username: 
 github_username: ummshsh
 
