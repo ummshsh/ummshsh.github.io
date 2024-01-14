@@ -2,8 +2,10 @@
 layout: default
 ---
 {%- assign date_format = "%b %-d, %Y" -%}
-<a class="post-meta" href="{{url}}">{{ page.date | date: date_format }}</a>
-<span class="micropost">{{content}}</span>
+<div class="micropost">
+    <a class="post-meta" href="{{url}}">{{ page.date | date: date_format }}</a>
+    {{content}}
+</div>
 
 <div class="hackToGenerateContentPolicy" style="display: none;">
     <iframe class="giscus-frame giscus-frame--loading" title="Comments" scrolling="no" allow="clipboard-write" src="https://giscus.app/"></iframe>
