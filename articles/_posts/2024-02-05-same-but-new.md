@@ -9,4 +9,4 @@ tags: music production hip-hop
 <br>
 
 
-![Art]({{site.url}}/assets/images/same_but_new.png)  
+![Art]({{site.url}}/assets/images/same_but_new.png)
