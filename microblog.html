@@ -1,15 +1,9 @@
 ---
-layout: default
+layout: microposts
 title: shsh microblog
-permalink: /microblog.html
+permalink: /microblog/
+pagination:
+  enabled: true
+  collection: microblog
+  per_page: 15
 ---
-{% assign sorted = site.microblog | sort: 'date' | reverse  %}
-{% for post in sorted %}
-    {%- assign date_format = "%b %-d, %Y" -%}
-    <div class="micropost" style="padding-bottom: 20px; border-bottom: var(--border);">        
-        <a class="post-meta" href="{{post.url}}" >{{ post.date | date: date_format }}</a>
-        {{post.content}}
-        <a class="post-meta" href="{{post.url}}" >Comment</a>
-    </div>
-    <br>
-{% endfor %}
