@@ -7,4 +7,4 @@ tags: music production trip-hop
 
 <!--more-->
 <br>
-![Art]({{site.url}}/assets/images/low_vibes.PNG)  
+![Art]({{site.url}}/assets/images/low_vibes.PNG){:.zoomable}

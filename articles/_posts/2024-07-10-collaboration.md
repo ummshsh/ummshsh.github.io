@@ -5,7 +5,7 @@ tags: music production vst daw dsp en
 ---
 When mixing in the box, people use lots of VST plugins to process a single sound. These plugins are developed by different individuals, often by more than one person. Then, there are multiple sounds to consider. Inherently, this makes whatever you are doing in the digital music space highly collaborative (writing, mixing, mastering).
 
-![particles]({{site.url}}/assets/images/particles.jpg)
+![particles]({{site.url}}/assets/images/particles.jpg){:.zoomable}
 
 <!--more-->
 

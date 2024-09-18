@@ -10,30 +10,30 @@ tags: b3d render ru 3d
 Фото в порядке выполенения, почти все красивое было по туториалу сделано.
 Я пока не понимаю как ставить свет и камеру чтобы было красиво. И к тому же в приоритете были модели, а не ренедеры(их, кстати, обрабатывать лучше отдельно уже как 2д).
 
-![Art]({{site.url}}/assets/images/blender/blender_donut.png)
+![Art]({{site.url}}/assets/images/blender/blender_donut.png){:.zoomable}
 Это известный туториал. Он учит о таких вещах, что ты их не очень запоминаешь как новичок, но конечный результат как-то подсаживает.
 <!--more-->
 
 Далее я решил сделать вечные гейм ассеты, которые есть везде и всегда - бочки и ящики). Но вышло хуже чем в кс 1.6.
-![Art]({{site.url}}/assets/images/blender/blender_crate.png)
-![Art]({{site.url}}/assets/images/blender/blender_barrel.png)
+![Art]({{site.url}}/assets/images/blender/blender_crate.png){:.zoomable}
+![Art]({{site.url}}/assets/images/blender/blender_barrel.png){:.zoomable}
 
 Просто гумба без глаз, я не смог их сделать нормально поэтому удалил их для рендера. Да, они были настолько плохи, что гумба без них выглядит лучше))
-![Art]({{site.url}}/assets/images/blender/blender_goomba.png)
+![Art]({{site.url}}/assets/images/blender/blender_goomba.png){:.zoomable}
 
 А это образец того, что я очень переоценил свои силы и хотел сделать уже робота, но мне не хватило сил, я не понимал шейдинг(сейчас тоже не понимаю, если что) и отрендерил просто чтобы закрепить как-то прогресс в истории.
-![Art]({{site.url}}/assets/images/blender/blender_drone.png)
+![Art]({{site.url}}/assets/images/blender/blender_drone.png){:.zoomable}
 
 Это я сделал сам без туториалов и по рефам, выглядит ничего, узнал что такое Compose в бледере, понастраивал материалы, чуть начал понимать шейдинг. Какой-то странный и приятный скачок в качестве после гумбы-то)
-![Art]({{site.url}}/assets/images/blender/blender_tamagotchi.png)
+![Art]({{site.url}}/assets/images/blender/blender_tamagotchi.png){:.zoomable}
 
 Это по туториалу
-![Art]({{site.url}}/assets/images/blender/blender_basketball.png)
+![Art]({{site.url}}/assets/images/blender/blender_basketball.png){:.zoomable}
 
 Это тоже. Мне показалось остроумным заполнить эту банку с помощью симуляции физики, а не раскладывать пилюльки вручную(это по туториалу, а я не такой умный).
-![Art]({{site.url}}/assets/images/blender/blender_pills.png)
+![Art]({{site.url}}/assets/images/blender/blender_pills.png){:.zoomable}
 
 Это без, просто основано на MPC 3000, но это не она, просто хотел сделать чтобы сэмплер был узнаваем. Хотел сделать что-то простое, но узнаваемое в  корпоративной стилистике, как эти человечки круглые с презентаций.
-![Art]({{site.url}}/assets/images/blender/blender_mpc.png)
+![Art]({{site.url}}/assets/images/blender/blender_mpc.png){:.zoomable}
 
 Увидимся в следующем блендердампе!
