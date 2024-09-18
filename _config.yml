@@ -19,8 +19,8 @@ tag_permalink_style: pretty
 
 excerpt_separator: <!--more-->
 
-style: light #dark\hacker
-#listen_for_clients_preferred_style: 3
+style: dark #light\hacker
+listen_for_clients_preferred_style: true
 
 #paginate: 10
 #paginate_path: "/page:num/"
