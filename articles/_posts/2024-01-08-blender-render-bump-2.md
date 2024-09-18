@@ -5,7 +5,7 @@ tags: b3d render ru 3d
 ---
 Еще один дамп. Теперь без определенного порядка.
 
-![Art]({{site.url}}/assets/images/blender/3d loves.png)
+![Art]({{site.url}}/assets/images/blender/3d loves.png){:.zoomable}
 <!--more-->
 
 Заглавное изобржаение из Octane, он бесплатный для бледера и цвета в нем отличные, мне очень нравится. 
