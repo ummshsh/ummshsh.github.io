@@ -220,7 +220,7 @@ pre { background-color: var(--background-color-pre); line-height: 1; border-radi
   }
   
 
-  /**
+/**
  * Image zoom
  */
  .image-container {
@@ -238,7 +238,7 @@ pre { background-color: var(--background-color-pre); line-height: 1; border-radi
   background: rgba(0, 0, 0, 0.8);
   justify-content: center;
   align-items: center;
-  z-index: 1000;
+  z-index: 999;
 }
 
 .zoom-popup img {
@@ -246,15 +246,34 @@ pre { background-color: var(--background-color-pre); line-height: 1; border-radi
   max-height: 100%;
 }
 
-.close-popup {
-  position: absolute;
-  top: 10px;
-  right: 20px;
-  color: white;
-  font-size: 2em;
+.zoomable {
   cursor: pointer;
 }
 
-.zoomable {
+.close-popup {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 40px;
+  height: 40px;
+  background-color: rgba(121, 121, 121, 0.641);
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
   cursor: pointer;
+  font-size: 24px;
+  z-index: 1000;
+}
+
+.close-popup:hover {
+  background-color: rgba(255, 0, 0, 0.5);
+  z-index: 1000;
+}
+
+.zoom-popup img {
+  max-width: none;
+  max-height: none;
+  cursor: grab;
 }
