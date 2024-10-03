@@ -9,4 +9,4 @@ tags: music production jungle
 <br>
 Track was done last year actually.
 
-![Art]({{site.url}}/assets/images/jungle-tower.png){:.zoomable}
+![Art]({{site.url}}/assets/images/jungle-tower.png){:.clickableimg}

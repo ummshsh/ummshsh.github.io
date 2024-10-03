@@ -5,7 +5,7 @@ tags: crypto en
 ---
 Company that didn't held accountable for thousands of dollars stolen and now blocks everyone on Twitter(X).
 
-![I'm blocked]( {{site.url}}/assets/images/atomic_wallet.png){:.zoomable}
+![I'm blocked]( {{site.url}}/assets/images/atomic_wallet.png){:.clickableimg}
 
 <!--more-->
 
@@ -32,4 +32,4 @@ And I just wanted this article to be one more thing you can come across if you g
 
 # Caution
 And please don't respond to those fucks, if you lost some money they are gone.
-![Scam on X]( {{site.url}}/assets/images/atomic_wallet_2.png){:.zoomable}
+![Scam on X]( {{site.url}}/assets/images/atomic_wallet_2.png){:.clickableimg}

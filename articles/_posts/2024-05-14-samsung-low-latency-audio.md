@@ -11,7 +11,7 @@ This is how I tried to debug "poor" audio quality of `Koala` sampler on my Samsu
 # Koala samler and poor audio quality
 It is all started from [Koala sampler](https://www.koalasampler.com/).
 
-![Koala sampler]({{site.url}}/assets/images/koala_sampler.jpg){:.zoomable}
+![Koala sampler]({{site.url}}/assets/images/koala_sampler.jpg){:.clickableimg}
 
 I was about to do some portable music on my `Samsung S21` and I had high hopes, because I coudn't pull a trigger on `SP404mk2` or `MPC One+` for a long time but still wanted to get away from PC at least while making music. And `Koala` seemed very much capable or doing sampled music as this app was mentioned in every `404` talk. Recent partnership with Roland only proves it. And I also knew it beforehand, I've watched a lot of `SP404` videos and know that they are trading blows with `Koala`.
 
@@ -21,12 +21,12 @@ I played with Koala for a while(bought all extensions) but I found out that this
 
 > On topic of `MV-8000` I would love to have something like this on new hardware with linear arranger.
 
-![Мой Roland MV-8000]({{site.url}}/assets/images/mv8000.jpg){:.zoomable}
+![Мой Roland MV-8000]({{site.url}}/assets/images/mv8000.jpg){:.clickableimg}
 
 So, the issue was, and it was very frustrating: If you import sample via Koala sample browser or get any sound into Koala somehow(you can record, import video, import from sample browser), then it becomes very degraded in sound quality inside project.
 You can just preview sample in browser then load it to pad and it would be immediately worse, I regretted spending my money at a time.
 
-![Koala's sample browser]({{site.url}}/assets/images/koala_sample_browser.jpg){:.zoomable}
+![Koala's sample browser]({{site.url}}/assets/images/koala_sample_browser.jpg){:.clickableimg}
 
 I've spent quite a while debugging and even deleted some projects in the process but then I noticed that actually when I use headphones sound quality was very good in both sample browser and in project on pads. More than that they sounded the same!
 
@@ -71,14 +71,14 @@ And when I say that `audio without enhancements, that sounds bad` I mean: It sou
 #### Test 2
 Then I performed another check using `Oboe`.  
 > Why `Oboe` is low latency API you can check in this talk [Don Turner - Winning on Android](https://youtu.be/tWBojmBpS74) from 5 years ago =). But here is `why` in one slide from this talk:
-![Oboe api's description]({{site.url}}/assets/images/oboe_apis.png){:.zoomable}
+![Oboe api's description]({{site.url}}/assets/images/oboe_apis.png){:.clickableimg}
 
 There is an examples folder in `Oboe` library for low latency applications in [Oboe git](https://github.com/google/oboe/blob/main/samples/hello-oboe/README.md). I used [drumthumper](https://github.com/google/oboe/tree/main/samples/drumthumper) to check if my drum breaks will sound as bad as Koala does using low latecy API.
 What I've done is... not much, but it's a honest work =) 
 
 This was 5 min work just to check how it sounds:
 1. I've built [drumthumper](https://github.com/google/oboe/tree/main/samples/drumthumper) with my own sounds of drum breaks and installed on my phone 
-![DrumThumper application, screen from emulator]({{site.url}}/assets/images/DrumThumper.png){:.zoomable}
+![DrumThumper application, screen from emulator]({{site.url}}/assets/images/DrumThumper.png){:.clickableimg}
 2. I've uploaded same drum breaks files that I used in application to my phone separately
 3. Had a listen and results are the same: `Files played through app(low latency) sounds terrible like Koala, same files played through any player on my phone sound miles better`.
 

@@ -23,4 +23,4 @@ tags: music mix vinyl ru
 
 Как экзепляр [Musique concrète](https://en.wikipedia.org/wiki/Musique_concr%C3%A8te) из мира хип-хопа заслуживает внимания.  
 А вот и сами пласты
-![Art]({{site.url}}/assets/images/trevor_x_vadim.JPG){:.zoomable}
+![Art]({{site.url}}/assets/images/trevor_x_vadim.JPG){:.clickableimg}
