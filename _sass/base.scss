@@ -36,6 +36,7 @@ code.language-plaintext {font-size: 1.3em; color: var(--code-color-16);}
 .pagination { text-align: center; padding-top: 1em; padding-bottom: 2em; }
 .micropost { font-size: 20px; padding-bottom:50px;}
 .post {padding-bottom:50px;}
+
 /**
  * Layout
  */
@@ -160,7 +161,6 @@ pre { background-color: var(--background-color-pre); line-height: 1; border-radi
 /**
  * Glitch
  */
-
 .glitch {
   position: relative;
   text-shadow: 0.05em 0 0 #00fffc, -0.03em -0.04em 0 #fc00ff,
@@ -217,4 +217,11 @@ pre { background-color: var(--background-color-pre); line-height: 1; border-radi
     text-shadow: -0.05em 0 0 #00fffc, -0.025em -0.04em 0 #fc00ff,
       -0.04em -0.025em 0 #fffc00;
   }
+}
+
+/**
+ * Clickable images
+ */
+.clickableimg {
+  cursor: pointer;
 }
