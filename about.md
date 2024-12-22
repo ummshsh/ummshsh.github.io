@@ -17,6 +17,7 @@ RU\EN
 Site generator [Jekyll](https://jekyllrb.com/)
 Comments are from [Giscuss](https://giscus.app/)
 Base theme was taken from [Console theme](https://github.com/b2a3e8/jekyll-theme-console)
+Snow animation was taken from [alphardex](https://codepen.io/alphardex/pen/dyPorwJ)
 
 
 # RSS
