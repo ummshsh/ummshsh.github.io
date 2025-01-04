@@ -29,4 +29,4 @@ function createSnowflakes() {
 }
 
 // Call the function to generate snowflakes
-  createSnowflakes();
+createSnowflakes();
