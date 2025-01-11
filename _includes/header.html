@@ -4,16 +4,9 @@
     <a href="/" class="logo" style="display: inline-flex;">
       <img src = "{{site.url}}/assets/images/logo/loves vector.svg" alt="Loves" style="max-width: 100px;" />
     </a>    
-    <ul style="display: inline-block;">      
-      <!-- {%- for path in page_paths -%}
-        {%- assign my_page = site.pages | where: "path", path | first -%}
-        {%- if my_page.title -%}
-        <li><a href="{{ my_page.url | relative_url }}">{{ my_page.title | escape }}</a></li>
-        {%- endif -%}
-      {%- endfor -%} -->
+    <ul style="display: inline-block;">
       <li><a href="/">home</a></li>
       <li><a href="/microblog">microblog</a></li>
-      <li><a href="/tags">tags</a></li>
       <li><a href="/about">about</a></li>
     </ul>
   </div>
