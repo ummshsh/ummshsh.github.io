@@ -19,7 +19,7 @@ function createSnowflakes() {
   
   document.body.appendChild(snowContainer);
 
-  const totalSnowflakes = 200; // Match your SASS $total variable
+  const totalSnowflakes = 200;
   
   for (let i = 0; i < totalSnowflakes; i++) {
     const snowflake = document.createElement('div');
@@ -29,4 +29,4 @@ function createSnowflakes() {
 }
 
 // Call the function to generate snowflakes
-createSnowflakes();
+// createSnowflakes();
