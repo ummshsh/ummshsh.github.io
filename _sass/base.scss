@@ -66,8 +66,8 @@ iframe { width: 100%;}
 /**
  * Header/Navigation
  */
-.menu { border-top: var(--border);  border-bottom: var(--border);  margin-bottom: 25px; padding-bottom: 20px;
-    padding-top: 20px; display: flex; justify-content:space-between; vertical-align:top; width: 100%;}
+.menu { margin-bottom: 25px; padding-bottom: 20px;
+    padding-top: 20px; padding-left: 10px; display: flex; justify-content:space-between; vertical-align:top; width: 100%;}
 .menu ul { margin-top: 12px;  margin-bottom: 12px;  padding-left: 0px;  list-style-type: none;  text-align: right; }
 .menu ul li { display: inline;  margin-left: 10px; }
 .menu ul li a { text-decoration: none;  color: var(--text-color); }
