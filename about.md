@@ -3,7 +3,8 @@ layout: page
 title: about
 permalink: /about/
 ---
-shsh's blog with accidental shitpost, sorry  
+# About
+Тут пишу про автоматизацию тестирования ПО, программирование и все что связано с музыкой. Плюс про вообще все в микроблог разделе. 
 RU\EN
 
 # Links

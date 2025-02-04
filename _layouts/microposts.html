@@ -9,8 +9,8 @@ pagination:
 <!-- This loops through the paginated microposts -->
 {% for post in paginator.posts %}
   {%- assign date_format = "%b %-d, %Y" -%}
-  <div class="micropost" style="padding-bottom: 20px; border-bottom: var(--border);">
-    <a class="post-meta" href="{{ post.url }}">{{ post.date | date: date_format }}</a>
+  <div class="micropost">
+    <a class="post-meta-micro" href="{{ post.url }}">{{ post.date | date: date_format }}</a>
     {{ post.content }}
     <a class="post-meta" href="{{ post.url }}">Comment</a>
   </div>
