@@ -22,6 +22,10 @@ RU\EN
   {{ site | tag_cloud }}
 </div>
 
+# Friendly and intresting links
+[galima youtube](https://www.youtube.com/@galimusha) - My wife's blog about her journey in painting
+[Dobriyanchik's Blog](https://dobriyanchik.github.io/) - Test automation, science
+
 # Credits for site design
 Site generator [Jekyll](https://jekyllrb.com/)
 Comments are from [Giscuss](https://giscus.app/)
