@@ -2,7 +2,7 @@
 layout: default
 ---
 <h1>Posts with `{{ page.tag }}` tag</h1>
-<ul>
+<ul class="post-list">
 {% for post in page.posts %}
 {%- assign date_format = "%b %-d, %Y" -%}
   <li>
