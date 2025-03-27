@@ -1,20 +1,23 @@
 document.querySelectorAll('.hover-footnote').forEach(element => {
-  element.addEventListener('mouseenter', function(e) {
-    const tooltip = this.querySelector('::after');
-    
+  const tooltip = element.querySelector('::after');
+  
+  const positionTooltip = () => {
     tooltip.style.left = '';
     tooltip.style.top = '';
     tooltip.style.right = '';
     tooltip.style.bottom = '';
-    
-    const elementRect = this.getBoundingClientRect();
+   
+    const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
+    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+   
+    const elementRect = element.getBoundingClientRect();
     const tooltipRect = tooltip.getBoundingClientRect();
     const viewportWidth = window.innerWidth;
     const viewportHeight = window.innerHeight;
-    
+   
     let positionX = 'center';
     let positionY = 'top';
-    
+   
     const centerX = elementRect.left + (elementRect.width / 2) - (tooltipRect.width / 2);
     if (centerX + tooltipRect.width > viewportWidth) {
       positionX = 'right';
@@ -22,14 +25,14 @@ document.querySelectorAll('.hover-footnote').forEach(element => {
     if (centerX < 0) {
       positionX = 'left';
     }
-    
+   
     const topAbove = elementRect.top - tooltipRect.height - 5;
     const topBelow = elementRect.bottom + 5;
-    
+   
     if (topAbove < 0) {
       positionY = 'bottom';
     }
-    
+   
     switch(positionX) {
       case 'left':
         tooltip.style.left = '10px';
@@ -40,7 +43,7 @@ document.querySelectorAll('.hover-footnote').forEach(element => {
       default:
         tooltip.style.left = `${Math.max(10, Math.min(centerX, viewportWidth - tooltipRect.width - 10))}px`;
     }
-    
+   
     switch(positionY) {
       case 'top':
         tooltip.style.bottom = `${viewportHeight - elementRect.top + 5}px`;
@@ -48,6 +51,14 @@ document.querySelectorAll('.hover-footnote').forEach(element => {
       case 'bottom':
         tooltip.style.top = `${elementRect.bottom + 5}px`;
         break;
+    }
+  };
+
+  element.addEventListener('mouseenter', positionTooltip);
+  
+  window.addEventListener('scroll', () => {
+    if (tooltip.style.opacity === '1') {
+      positionTooltip();
     }
   });
 });
