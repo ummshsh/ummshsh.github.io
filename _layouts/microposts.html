@@ -11,7 +11,7 @@ pagination:
   {%- assign date_format = "%b %-d, %Y" -%}
   <div class="micropost">
     <a class="post-meta-micro" href="{{ post.url }}">{{ post.date | date: date_format }}</a>
-    {{ post.content }}
+    {{ post.content | hover_footnotes }}
     <a class="post-meta" href="{{ post.url }}">Comment</a>
   </div>
   <br>

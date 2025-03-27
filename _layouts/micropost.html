@@ -4,7 +4,7 @@ layout: default
 {%- assign date_format = "%b %-d, %Y" -%}
 <div class="micropost">
     <a class="post-meta-micro" href="{{url}}">{{ page.date | date: date_format }}</a>
-    {{content}}
+    {{ content | hover_footnotes }}
 </div>
 
 <div class="hackToGenerateContentPolicy" style="display: none;">

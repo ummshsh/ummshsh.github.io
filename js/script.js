@@ -1,3 +1,57 @@
+document.querySelectorAll('.hover-footnote').forEach(element => {
+  element.addEventListener('mouseenter', function(e) {
+    const tooltip = this.querySelector('::after');
+    
+    tooltip.style.left = '';
+    tooltip.style.top = '';
+    tooltip.style.right = '';
+    tooltip.style.bottom = '';
+    
+    const elementRect = this.getBoundingClientRect();
+    const tooltipRect = tooltip.getBoundingClientRect();
+    const viewportWidth = window.innerWidth;
+    const viewportHeight = window.innerHeight;
+    
+    let positionX = 'center';
+    let positionY = 'top';
+    
+    const centerX = elementRect.left + (elementRect.width / 2) - (tooltipRect.width / 2);
+    if (centerX + tooltipRect.width > viewportWidth) {
+      positionX = 'right';
+    }
+    if (centerX < 0) {
+      positionX = 'left';
+    }
+    
+    const topAbove = elementRect.top - tooltipRect.height - 5;
+    const topBelow = elementRect.bottom + 5;
+    
+    if (topAbove < 0) {
+      positionY = 'bottom';
+    }
+    
+    switch(positionX) {
+      case 'left':
+        tooltip.style.left = '10px';
+        break;
+      case 'right':
+        tooltip.style.right = '10px';
+        break;
+      default:
+        tooltip.style.left = `${Math.max(10, Math.min(centerX, viewportWidth - tooltipRect.width - 10))}px`;
+    }
+    
+    switch(positionY) {
+      case 'top':
+        tooltip.style.bottom = `${viewportHeight - elementRect.top + 5}px`;
+        break;
+      case 'bottom':
+        tooltip.style.top = `${elementRect.bottom + 5}px`;
+        break;
+    }
+  });
+});
+
 document.querySelectorAll('.clickableimg').forEach(img => {
     img.addEventListener('click', function() {
       window.location.href = this.src;
@@ -6,15 +60,14 @@ document.querySelectorAll('.clickableimg').forEach(img => {
 
 
 function createSnowflakes() {
-  // Create a container for the snowflakes
   const snowContainer = document.createElement('div');
   snowContainer.style.position = 'fixed';
   snowContainer.style.top = '0';
   snowContainer.style.left = '0';
   snowContainer.style.width = '100vw';
   snowContainer.style.height = '100vh';
-  snowContainer.style.pointerEvents = 'none'; // Allow clicks through the snow
-  snowContainer.style.zIndex = '9999'; // Make sure it appears above other content
+  snowContainer.style.pointerEvents = 'none';
+  snowContainer.style.zIndex = '9999';
   snowContainer.classList.add('snow-container');
   
   document.body.appendChild(snowContainer);
@@ -27,6 +80,4 @@ function createSnowflakes() {
     snowContainer.appendChild(snowflake);
   }
 }
-
-// Call the function to generate snowflakes
 // createSnowflakes();
