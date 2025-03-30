@@ -159,10 +159,10 @@ main .gsc-loading-image {
     --color-fg-default: #c9d1d9;
     --color-fg-muted: #8b949e;
     --color-fg-subtle: #484f58;
-    --color-canvas-default: #e1019;
+    --color-canvas-default: #000;
     --color-canvas-overlay: #161b22;
-    --color-canvas-inset: #0e1019;
-    --color-canvas-subtle: #0e1019;
+    --color-canvas-inset: #000;
+    --color-canvas-subtle: #000;
     --color-border-default: #30363d;
     --color-border-muted: #21262d;
     --color-neutral-muted: rgb(110 118 129 / 40%);
