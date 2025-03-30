@@ -22,7 +22,7 @@ RU\EN
   {{ site | tag_cloud }}
 </div>
 
-# Friendly and intresting links
+# Friendly and interesting links
 [galima youtube](https://www.youtube.com/@galimusha) - My wife's blog about her journey in painting
 [Dobriyanchik's Blog](https://dobriyanchik.github.io/) - Test automation, science
 
