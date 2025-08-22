@@ -25,6 +25,7 @@ RU\EN
 # Friendly and interesting links
 [galima youtube](https://www.youtube.com/@galimusha) - My wife's blog about her journey in painting
 [Dobriyanchik's Blog](https://dobriyanchik.github.io/) - Test automation, science
+[melatonin.dev](https://melatonin.dev/blog/) - No affiliation, just like this JUCE C++ audio blog
 
 # Credits for site design
 Site generator [Jekyll](https://jekyllrb.com/)
