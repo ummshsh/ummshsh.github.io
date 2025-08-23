@@ -2,6 +2,7 @@
 layout: post
 title: "Microsoft Testing Platform(vs VSTest)"
 tags: csharp code en autotests
+hidden: true
 ---
 Okay, if you missed [Microsoft.Testing.Platform](https://learn.microsoft.com/en-us/dotnet/core/testing/microsoft-testing-platform-intro), here are links to catch up quickly on this.
 
