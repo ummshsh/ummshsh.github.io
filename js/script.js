@@ -91,4 +91,4 @@ function createSnowflakes() {
     snowContainer.appendChild(snowflake);
   }
 }
-// createSnowflakes();
+createSnowflakes();
