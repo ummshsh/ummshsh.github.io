@@ -48,6 +48,11 @@
     box-sizing: border-box;
 }
 
+html, body {
+    width: 100%;
+    overflow-x: hidden;
+}
+
 body {
     font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     line-height: 2;
@@ -166,7 +171,7 @@ header {
 
 .logo:hover {
     text-decoration: none;
-    background-color: transparent; /* Keep logo transparent on hover */
+    background-color: transparent;
     transform: scale(1.05);
 }
 
@@ -268,7 +273,8 @@ main {
 }
 
 .post-content pre,
-.about-content pre {
+.about-content pre,
+.microblog-content pre {
     background-color: var(--background-color-pre);
     padding: 1rem;
     border-radius: 6px;
@@ -289,9 +295,9 @@ main {
 }
 
 /* Media */
-.post-content img, .about-content img,
-.post-content video, .about-content video,
-.post-content iframe, .about-content iframe {
+.post-content img, .about-content img, .microblog-content img,
+.post-content video, .about-content video, .microblog-content video,
+.post-content iframe, .about-content iframe, .microblog-content iframe {
     max-width: 100%;
     margin: 1rem 0;
     display: block;
@@ -697,9 +703,8 @@ figure.highlight { margin: 5px 0; }
 .snow-container {
     position: fixed;
     top: 0; left: 0;
-    width: 100%; height: 100vh;
+    width: 100%; height: 100%;
     pointer-events: none;
-    /* Change this from 9999 to -1 */
     z-index: -1;
 }
 
