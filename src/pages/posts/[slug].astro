@@ -1,0 +1,47 @@
+---
+import PostLayout from "../../layouts/PostLayout.astro";
+
+export async function getStaticPaths() {
+    const postFiles = import.meta.glob("../../posts/*.md", { eager: true });
+    const posts = Object.values(postFiles);
+
+    return posts.map((post) => {
+        const filename = post.file.split("/").pop()?.replace(".md", "") || "";
+        return {
+            params: { slug: filename },
+            props: { post },
+        };
+    });
+}
+
+const { post } = Astro.props;
+
+// Extract date from filename for display
+const filename = post.file.split("/").pop() || "";
+const dateMatch = filename.match(/(\d{4}-\d{2}-\d{2})/);
+const fileDate = dateMatch ? dateMatch[1] : "";
+
+// Create frontmatter with date if not present
+const frontmatter = {
+    ...post.frontmatter,
+    date: post.frontmatter.date || fileDate,
+};
+
+// Handle content rendering with fallback for Jekyll syntax
+let ContentComponent;
+let rawContent = "";
+
+try {
+    ContentComponent = post.Content;
+} catch (error) {
+    // If Content component fails, fall back to raw content processing
+    rawContent = post
+        .rawContent()
+        .replace(/\{\{site\.url\}\}/g, "/assets")
+        .replace(/\{:\.clickableimg\}/g, "");
+}
+---
+
+<PostLayout frontmatter={frontmatter}>
+    {ContentComponent ? <ContentComponent /> : <div set:html={rawContent} />}
+</PostLayout>

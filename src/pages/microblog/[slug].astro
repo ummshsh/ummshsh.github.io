@@ -1,0 +1,165 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+// Helper functions
+function getDateTimeFromPath(path: string): string {
+    // Extract date and time from filename like 2023-07-20-00-00
+    const match = path.match(
+        /(\d{4}-\d{1,2}-\d{1,2})-(\d{1,2})-(\d{1,2})-?(\d{1,2})?/,
+    );
+    if (match) {
+        const [, datePart, hour, minute, second] = match;
+        const parts = datePart.split("-");
+        const year = parts[0];
+        const month = parts[1].padStart(2, "0");
+        const day = parts[2].padStart(2, "0");
+        const hourPadded = hour.padStart(2, "0");
+        const minutePadded = minute.padStart(2, "0");
+        const secondPadded = second ? second.padStart(2, "0") : "00";
+        return `${year}-${month}-${day}T${hourPadded}:${minutePadded}:${secondPadded}`;
+    }
+    // Fallback to just date
+    const dateMatch = path.match(/(\d{4}-\d{1,2}-\d{1,2})/);
+    if (dateMatch) {
+        const parts = dateMatch[1].split("-");
+        const year = parts[0];
+        const month = parts[1].padStart(2, "0");
+        const day = parts[2].padStart(2, "0");
+        return `${year}-${month}-${day}T00:00:00`;
+    }
+    return "";
+}
+
+function formatMicroblogTitle(dateTimeString: string): string {
+    const d = new Date(dateTimeString);
+    if (isNaN(d.getTime())) return dateTimeString;
+
+    // Date: Dec 22, 2025
+    const datePart = d.toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "short",
+        day: "numeric",
+    });
+
+    // Time: 16:51 (Manual 24h construction)
+    const hours = d.getHours().toString().padStart(2, "0");
+    const minutes = d.getMinutes().toString().padStart(2, "0");
+
+    return `${datePart}, ${hours}:${minutes}`;
+}
+
+function getMicroPostContent(post: any): string {
+    try {
+        let processedContent = post.rawContent;
+
+        if (processedContent.length === 0) {
+            return "";
+        }
+
+        // Replace Jekyll site.url with empty string or relative path
+        processedContent = processedContent.replace(/\{\{site\.url\}\}/g, "");
+
+        // Remove Jekyll-style CSS classes like {:.clickableimg}
+        processedContent = processedContent.replace(/\{:[^}]+\}/g, "");
+
+        // Convert markdown images: ![alt](src) -> <img src="src" alt="alt">
+        processedContent = processedContent.replace(
+            /!\[([^\]]*)\]\(([^)]+)\)/g,
+            '<img src="$2" alt="$1" style="max-width: 100%; height: auto;" class="clickableimg">',
+        );
+
+        // Convert markdown links: [text](url) -> <a href="url">text</a>
+        processedContent = processedContent.replace(
+            /\[([^\]]+)\]\(([^)]+)\)/g,
+            '<a href="$2">$1</a>',
+        );
+
+        // Convert line breaks to <br> tags
+        processedContent = processedContent.replace(/\n/g, "<br>");
+
+        return processedContent;
+    } catch (error) {
+        return "";
+    }
+}
+
+export async function getStaticPaths() {
+    // Get all microblog post files as raw strings
+    const microPostFiles = import.meta.glob("../../posts_micro/*.md", {
+        eager: true,
+        query: "?raw",
+        import: "default",
+    });
+
+    // Process microblog posts manually
+    const allMicroPosts = Object.entries(microPostFiles)
+        .map(([path, rawContent]: [string, string]) => {
+            return {
+                file: path,
+                rawContent: rawContent.trim(),
+            };
+        })
+        .filter((post) => post.rawContent.length > 0);
+
+    // Generate paths for each microblog post
+    return allMicroPosts.map((post) => {
+        const slug = post.file.split("/").pop()?.replace(".md", "") || "";
+
+        return {
+            params: { slug },
+            props: {
+                post,
+                slug,
+            },
+        };
+    });
+}
+
+const { post, slug } = Astro.props;
+const dateTime = getDateTimeFromPath(post.file);
+const content = getMicroPostContent(post);
+const pageTitle = formatMicroblogTitle(dateTime);
+---
+
+<BaseLayout title={`Microblog - ${pageTitle}`}>
+    <!-- Single post container -->
+    <div class="post">
+        <article>
+            <header class="post-header">
+                <!-- Title is the 24h date string -->
+                <h1 class="post-title">
+                    {pageTitle}
+                </h1>
+            </header>
+            <div class="post-content">
+                <Fragment set:html={content} />
+            </div>
+        </article>
+    </div>
+</BaseLayout>
+
+<style>
+    /*
+       Most styles are now handled by global .post, .post-header, .post-content classes.
+       We only keep specific fixes for inner content.
+    */
+    .post-content :global(img) {
+        margin: 1rem 0;
+        border-radius: 4px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        max-width: 100%;
+        height: auto;
+    }
+
+    .post-content :global(iframe) {
+        margin: 1rem 0;
+        max-width: 100%;
+    }
+
+    @media (max-width: 768px) {
+        .post-content :global(iframe) {
+            width: 100%;
+            height: 200px;
+        }
+    }
+</style>

@@ -1,0 +1,141 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+// Get all post files directly
+const postFiles = import.meta.glob("../posts/*.md", { eager: true });
+
+// Collect all unique tags with their post counts
+const tagCounts = new Map<string, number>();
+
+Object.entries(postFiles).forEach(([path, file]: [string, any]) => {
+    const post = {
+        file: path,
+        frontmatter: file.frontmatter || {},
+    };
+
+    // Skip hidden posts
+    if (post.frontmatter.hidden) return;
+
+    // Extract tags
+    const tags = post.frontmatter.tags ? post.frontmatter.tags.split(" ") : [];
+
+    tags.forEach((tag: string) => {
+        tagCounts.set(tag, (tagCounts.get(tag) || 0) + 1);
+    });
+});
+
+// Sort tags alphabetically
+const sortedTags = Array.from(tagCounts.entries()).sort(([a], [b]) =>
+    a.localeCompare(b),
+);
+---
+
+<BaseLayout title="about">
+    <div class="about-container">
+        <div class="about-content">
+                    <h1>About</h1>
+                    <p>
+                        Тут пишу про автоматизацию тестирования ПО, программирование и все что связано с музыкой. Плюс про вообще все в микроблог разделе.
+                    </p>
+                    <p>RU\EN</p>
+
+                    <h2>Links</h2>
+                    <ul>
+                        <li>
+                            <a
+                                href="https://github.com/ummshsh"
+                                target="_blank"
+                                rel="noopener noreferrer">GitHub</a
+                            >
+                        </li><li>
+                            <a
+                                href="https://www.goodreads.com/user/show/91881550-ummshsh"
+                                target="_blank"
+                                rel="noopener noreferrer">Goodreads</a
+                            >
+                        </li><li>
+                            <a
+                                href="https://letterboxd.com/ummshsh/films/"
+                                target="_blank"
+                                rel="noopener noreferrer">Letterboxd</a
+                            >
+                        </li><li>
+                            <a
+                                href="https://soundcloud.com/ummshsh"
+                                target="_blank"
+                                rel="noopener noreferrer">Soundcloud</a
+                            >
+                        </li>
+                    </ul>
+
+                    <h2>RSS</h2>
+                    <ul>
+                        <li>
+                            <a href="/rss.xml">RSS - articles</a>
+                        </li><li>
+                            <a href="/microblog/rss.xml">RSS - microblog</a>
+                        </li>
+                    </ul>
+
+                    <h2>Tag cloud</h2>
+                    {
+                        sortedTags.length > 0 ? (
+                            <div class="tag-cloud">
+                                {sortedTags.map(([tag, count]) => (
+                                    <a
+                                        href={`/tags/${tag}`}
+                                        class="tag tag-cloud-item"
+                                    >
+                                        {tag} ({count})
+                                    </a>
+                                ))}
+                            </div>
+                        ) : (
+                            <p>
+                                <em>No tags found</em>
+                            </p>
+                        )
+                    }
+
+                    <h2>Friendly and interesting links</h2>
+                    <ul>
+                        <li>
+                            <a
+                                href="https://www.youtube.com/@galimusha"
+                                target="_blank"
+                                rel="noopener noreferrer">galima youtube</a
+                            >
+                            - My wife's blog about her journey in painting
+                        </li><li>
+                            <a
+                                href="https://dobriyanchik.github.io/"
+                                target="_blank"
+                                rel="noopener noreferrer">Dobriyanchik's Blog</a
+                            >
+                            - Test automation, science
+                        </li><li>
+                            <a
+                                href="https://melatonin.dev/blog/"
+                                target="_blank"
+                                rel="noopener noreferrer">melatonin.dev</a
+                            >
+                            - No affiliation, just like this JUCE C++ audio blog
+                        </li>
+                    </ul>
+
+                    <h2>Credits for site design</h2>
+                    <p>Site generator <a
+                            href="https://astro.build/"
+                            target="_blank"
+                            rel="noopener noreferrer">Astro</a
+                        >
+                    </p>
+                    <p>Snow animation was taken from <a
+                            href="https://codepen.io/alphardex/pen/dyPorwJ"
+                            target="_blank"
+                            rel="noopener noreferrer">alphardex</a
+                        >
+                    </p>
+        </div>
+    </div>
+</BaseLayout>

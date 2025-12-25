@@ -1,0 +1,66 @@
+---
+import BaseLayout from "./BaseLayout.astro";
+
+export interface Props {
+    frontmatter: {
+        title: string;
+        tags?: string;
+        date?: string;
+        hidden?: boolean;
+    };
+}
+
+const { frontmatter } = Astro.props;
+const tags = frontmatter.tags ? frontmatter.tags.split(" ") : [];
+---
+
+<BaseLayout title={frontmatter.title}>
+    <article class="post">
+        <header class="post-header">
+            <h1 class="post-title">{frontmatter.title}</h1>
+            {
+                frontmatter.date && (
+                    <time class="post-date" datetime={frontmatter.date}>
+                        {new Date(frontmatter.date).toLocaleDateString(
+                            "en-US",
+                            {
+                                year: "numeric",
+                                month: "long",
+                                day: "numeric",
+                            },
+                        )}
+                    </time>
+                )
+            }
+            {
+                tags.length > 0 && (
+                    <div class="post-tags">
+                        {tags.map((tag) => (
+                            <a href={`/tags/${tag}`} class="tag">
+                                {tag}
+                            </a>
+                        ))}
+                    </div>
+                )
+            }
+        </header>
+
+        <div class="post-content">
+            <slot />
+        </div>
+    </article>
+
+    <script>
+        // Process tooltip syntax in post content after page load
+        document.addEventListener("DOMContentLoaded", function () {
+            const postContent = document.querySelector(".post-content");
+            if (postContent) {
+                // Convert tooltip syntax: (::tooltip text) -> <span class="hover-footnote" data-title="tooltip text">*</span>
+                postContent.innerHTML = postContent.innerHTML.replace(
+                    /\(\:\:([^)]+)\)/g,
+                    '<span class="hover-footnote" data-title="$1">*</span>',
+                );
+            }
+        });
+    </script>
+</BaseLayout>

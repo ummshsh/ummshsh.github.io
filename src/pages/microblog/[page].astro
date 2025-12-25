@@ -1,0 +1,203 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Pagination from "../../components/Pagination.astro";
+
+export async function getStaticPaths() {
+    // Get all post files directly
+    const postFiles = import.meta.glob("../../posts/*.md", { eager: true });
+
+    // Process posts manually
+    const allPosts = Object.entries(postFiles)
+        .map(([path, file]: [string, any]) => ({
+            file: path,
+            frontmatter: file.frontmatter || {},
+            rawContent: file.rawContent,
+            compiledContent: file.compiledContent,
+            Content: file.Content,
+        }))
+        .filter((post) => !post.frontmatter.hidden)
+        .sort((a, b) => {
+            const getDateFromPath = (path: string) => {
+                const match = path.match(/(\d{4}-\d{1,2}-\d{1,2})/);
+                return match ? match[1] : "";
+            };
+            const dateA = getDateFromPath(a.file);
+            const dateB = getDateFromPath(b.file);
+            return dateB.localeCompare(dateA);
+        });
+
+    const postsPerPage = 10;
+    const totalPages = Math.ceil(allPosts.length / postsPerPage);
+
+    // Generate paths for pages 2 and beyond
+    return Array.from({ length: totalPages - 1 }, (_, i) => {
+        const pageNum = i + 2;
+        const startIndex = (pageNum - 1) * postsPerPage;
+        const endIndex = startIndex + postsPerPage;
+        const paginatedPosts = allPosts.slice(startIndex, endIndex);
+
+        return {
+            params: { page: pageNum.toString() },
+            props: {
+                paginatedPosts,
+                currentPage: pageNum,
+                totalPages,
+                totalPosts: allPosts.length,
+                startIndex,
+                endIndex,
+                allPosts,
+            },
+        };
+    });
+}
+
+const {
+    paginatedPosts,
+    currentPage,
+    totalPages,
+    totalPosts,
+    startIndex,
+    endIndex,
+} = Astro.props;
+
+// Helper functions
+function getSlugFromPath(path: string): string {
+    return path.split("/").pop()?.replace(".md", "") || "";
+}
+
+function getDateFromPath(path: string): string {
+    const match = path.match(/(\d{4}-\d{1,2}-\d{1,2})/);
+    if (match) {
+        const parts = match[1].split("-");
+        const year = parts[0];
+        const month = parts[1].padStart(2, "0");
+        const day = parts[2].padStart(2, "0");
+        return `${year}-${month}-${day}`;
+    }
+    return "";
+}
+
+function getExcerpt(post: any): string | null {
+    try {
+        let rawContent = "";
+        if (typeof post.rawContent === "function") {
+            rawContent = post.rawContent();
+        } else if (typeof post.rawContent === "string") {
+            rawContent = post.rawContent;
+        } else {
+            return null;
+        }
+
+        const moreIndex = rawContent.indexOf("<!--more-->");
+        if (moreIndex === -1) return null;
+
+        const beforeMore = rawContent.substring(0, moreIndex);
+        const withoutFrontmatter = beforeMore.replace(/^---[\s\S]*?---\s*/, "");
+
+        if (withoutFrontmatter.trim().length === 0) return null;
+
+        let processedContent = withoutFrontmatter.trim();
+        processedContent = processedContent.replace(
+            /!\[([^\]]*)\]\(([^)]+)\)/g,
+            '<img src="$2" alt="$1" style="max-width: 100%; height: auto;">',
+        );
+        processedContent = processedContent.replace(
+            /\(\:\:([^)]+)\)/g,
+            '<span class="hover-footnote" data-title="$1">*</span>',
+        );
+        processedContent = processedContent.replace(
+            /\[([^\]]+)\]\(([^)]+)\)/g,
+            '<a href="$2">$1</a>',
+        );
+        processedContent = processedContent.replace(
+            /^>\s*(.+)$/gm,
+            '<blockquote>$1</blockquote>',
+        );
+        processedContent = processedContent.replace(/\n/g, "<br>");
+
+        return processedContent;
+    } catch (error) {
+        return null;
+    }
+}
+
+function generatePageUrl(page: number): string {
+    if (page === 1) return "/";
+    return `/page/${page}`;
+}
+---
+
+<BaseLayout title={`Blog - Page ${currentPage}`}>
+    <div class="posts-container">
+        <div class="posts-list">
+            {
+                paginatedPosts.map((post) => {
+                    const slug = getSlugFromPath(post.file);
+                    const date = getDateFromPath(post.file);
+                    const excerpt = getExcerpt(post);
+                    const tags = post.frontmatter.tags
+                        ? post.frontmatter.tags.split(" ")
+                        : [];
+
+                    return (
+                        <article class="post-item">
+                            <header class="post-header">
+                                <h2 class="post-title">
+                                    <a href={`/posts/${slug}`}>
+                                        {post.frontmatter.title || slug}
+                                    </a>
+                                </h2>
+                                {date && (
+                                    <time class="post-date" datetime={date}>
+                                        {new Date(date).toLocaleDateString(
+                                            "en-US",
+                                            {
+                                                year: "numeric",
+                                                month: "long",
+                                                day: "numeric",
+                                            },
+                                        )}
+                                    </time>
+                                )}
+                            </header>
+
+                            {tags.length > 0 && (
+                                <div class="post-tags">
+                                    {tags.map((tag) => (
+                                        <a href={`/tags/${tag}`} class="tag">
+                                            {tag}
+                                        </a>
+                                    ))}
+                                </div>
+                            )}
+
+                            {excerpt && (
+                                <div class="post-preview">
+                                    <Fragment set:html={excerpt} />
+                                </div>
+                            )}
+
+                            <footer class="post-footer">
+                                <a href={`/posts/${slug}`} class="read-more">
+                                    Read more →
+                                </a>
+                            </footer>
+                        </article>
+                    );
+                })
+            }
+        </div>
+
+        <div class="pagination-info">
+            Showing {startIndex + 1}-{Math.min(endIndex, totalPosts)} of {
+                totalPosts
+            } posts
+        </div>
+
+        <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            generatePageUrl={generatePageUrl}
+        />
+    </div>
+</BaseLayout>

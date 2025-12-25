@@ -1,0 +1,99 @@
+---
+interface Props {
+  currentPage: number;
+  totalPages: number;
+  generatePageUrl: (page: number) => string;
+  maxVisiblePages?: number;
+}
+
+const {
+  currentPage,
+  totalPages,
+  generatePageUrl,
+  maxVisiblePages = 7
+} = Astro.props;
+
+// Calculate which page numbers to show
+function getVisiblePages(current: number, total: number, maxVisible: number) {
+  if (total <= maxVisible) {
+    return Array.from({ length: total }, (_, i) => i + 1);
+  }
+
+  const halfVisible = Math.floor(maxVisible / 2);
+  let start = Math.max(1, current - halfVisible);
+  let end = Math.min(total, current + halfVisible);
+
+  // Adjust if we're near the beginning or end
+  if (end - start + 1 < maxVisible) {
+    if (start === 1) {
+      end = Math.min(total, start + maxVisible - 1);
+    } else {
+      start = Math.max(1, end - maxVisible + 1);
+    }
+  }
+
+  const pages = [];
+
+  // Always include first page if not in range
+  if (start > 1) {
+    pages.push(1);
+    if (start > 2) {
+      pages.push('...');
+    }
+  }
+
+  // Add visible page range
+  for (let i = start; i <= end; i++) {
+    pages.push(i);
+  }
+
+  // Always include last page if not in range
+  if (end < total) {
+    if (end < total - 1) {
+      pages.push('...');
+    }
+    pages.push(total);
+  }
+
+  return pages;
+}
+
+const visiblePages = getVisiblePages(currentPage, totalPages, maxVisiblePages);
+const hasPrevious = currentPage > 1;
+const hasNext = currentPage < totalPages;
+
+
+---
+
+{totalPages > 1 && (
+  <nav class="pagination" aria-label="Page navigation">
+    <div class="pagination-controls">
+
+      <!-- Page numbers -->
+      <div class="pagination-numbers">
+        {visiblePages.map((page) => {
+          if (page === '...') {
+            return <span class="pagination-ellipsis">…</span>;
+          }
+
+          const pageNum = page as number;
+          const isCurrent = pageNum === currentPage;
+
+          return (
+            <a
+              href={generatePageUrl(pageNum)}
+              class={`pagination-link ${isCurrent ? "pagination-current" : ""}`}
+              aria-label={isCurrent ? `Page ${pageNum}, current page` : `Go to page ${pageNum}`}
+              aria-current={isCurrent ? "page" : undefined}
+            >
+              {pageNum}
+            </a>
+          );
+        })}
+      </div>
+
+
+
+    </div>
+  </nav>
+)}

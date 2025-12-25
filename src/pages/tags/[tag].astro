@@ -1,0 +1,238 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Pagination from "../../components/Pagination.astro";
+
+export async function getStaticPaths() {
+    // Get all post files directly
+    const postFiles = import.meta.glob("../../posts/*.md", { eager: true });
+
+    // Collect all unique tags
+    const tagSet = new Set<string>();
+    const postsByTag = new Map<string, any[]>();
+
+    Object.entries(postFiles).forEach(([path, file]: [string, any]) => {
+        const post = {
+            file: path,
+            frontmatter: file.frontmatter || {},
+            rawContent: file.rawContent,
+            compiledContent: file.compiledContent,
+            Content: file.Content,
+        };
+
+        // Skip hidden posts
+        if (post.frontmatter.hidden) return;
+
+        // Extract tags
+        const tags = post.frontmatter.tags
+            ? post.frontmatter.tags.split(" ")
+            : [];
+
+        tags.forEach((tag: string) => {
+            tagSet.add(tag);
+            if (!postsByTag.has(tag)) {
+                postsByTag.set(tag, []);
+            }
+            postsByTag.get(tag)!.push(post);
+        });
+    });
+
+    // Generate paths for each tag
+    return Array.from(tagSet).map((tag) => ({
+        params: { tag },
+        props: {
+            tag,
+            posts: postsByTag.get(tag) || [],
+        },
+    }));
+}
+
+const { tag, posts } = Astro.props;
+
+// Sort posts by date (newest first)
+const sortedPosts = posts.sort((a: any, b: any) => {
+    const getDateFromPath = (path: string) => {
+        const match = path.match(/(\d{4}-\d{1,2}-\d{1,2})/);
+        return match ? match[1] : "";
+    };
+    const dateA = getDateFromPath(a.file);
+    const dateB = getDateFromPath(b.file);
+    return dateB.localeCompare(dateA);
+});
+
+// Simple pagination (you can enhance this later if needed)
+const postsPerPage = 10;
+const currentPage = 1;
+const totalPages = Math.ceil(sortedPosts.length / postsPerPage);
+const startIndex = 0;
+const endIndex = postsPerPage;
+const paginatedPosts = sortedPosts.slice(startIndex, endIndex);
+
+// Helper functions (copied from index.astro)
+function getSlugFromPath(path: string): string {
+    return path.split("/").pop()?.replace(".md", "") || "";
+}
+
+function getDateFromPath(path: string): string {
+    const match = path.match(/(\d{4}-\d{1,2}-\d{1,2})/);
+    if (match) {
+        const parts = match[1].split("-");
+        const year = parts[0];
+        const month = parts[1].padStart(2, "0");
+        const day = parts[2].padStart(2, "0");
+        return `${year}-${month}-${day}`;
+    }
+    return "";
+}
+
+function getExcerpt(post: any): string | null {
+    try {
+        // Try to access raw content directly from the file object
+        let rawContent = "";
+        if (typeof post.rawContent === "function") {
+            rawContent = post.rawContent();
+        } else if (typeof post.rawContent === "string") {
+            rawContent = post.rawContent;
+        } else {
+            return null;
+        }
+
+        const moreIndex = rawContent.indexOf("<!--more-->");
+
+        if (moreIndex === -1) {
+            return null;
+        }
+
+        // Extract content before <!--more-->
+        const beforeMore = rawContent.substring(0, moreIndex);
+
+        // Remove frontmatter (everything between --- at the start)
+        const withoutFrontmatter = beforeMore.replace(/^---[\s\S]*?---\s*/, "");
+
+        if (withoutFrontmatter.trim().length === 0) {
+            return null;
+        }
+
+        // Process basic markdown to HTML for images and links
+        let processedContent = withoutFrontmatter.trim();
+
+        // Convert markdown images: ![alt](src) -> <img src="src" alt="alt">
+        processedContent = processedContent.replace(
+            /!\[([^\]]*)\]\(([^)]+)\)/g,
+            '<img src="$2" alt="$1" style="max-width: 100%; height: auto;">',
+        );
+
+        // Convert tooltip syntax: (::tooltip text) -> <span class="hover-footnote" data-title="tooltip text">*</span>
+        processedContent = processedContent.replace(
+            /\(\:\:([^)]+)\)/g,
+            '<span class="hover-footnote" data-title="$1">*</span>',
+        );
+
+        // Convert markdown links: [text](url) -> <a href="url">text</a>
+        processedContent = processedContent.replace(
+            /\[([^\]]+)\]\(([^)]+)\)/g,
+            '<a href="$2">$1</a>',
+        );
+
+        // Convert markdown blockquotes: > text -> <blockquote>text</blockquote>
+        processedContent = processedContent.replace(
+            /^>\s*(.+)$/gm,
+            '<blockquote>$1</blockquote>',
+        );
+
+        // Convert line breaks to <br> tags
+        processedContent = processedContent.replace(/\n/g, "<br>");
+
+        return processedContent;
+    } catch (error) {
+        return null;
+    }
+}
+
+function generatePageUrl(page: number): string {
+    if (page === 1) return `/tags/${tag}`;
+    return `/tags/${tag}/page/${page}`;
+}
+---
+
+<BaseLayout title={`Posts tagged with "${tag}" | ummshsh blog`}>
+    <div class="posts-container">
+        <div class="tag-page-header">
+            <h1>Posts tagged with <span class="tag-highlight">#{tag}</span></h1>
+            <p class="tag-count">
+                {sortedPosts.length} post{sortedPosts.length !== 1 ? "s" : ""} found
+            </p>
+            <a href="/" class="back-to-home">← Back to all posts</a>
+        </div>
+        <div class="posts-list">
+            {
+                paginatedPosts.map((post, index) => {
+                    const slug = getSlugFromPath(post.file);
+                    const date = getDateFromPath(post.file);
+                    const excerpt = getExcerpt(post);
+                    const tags = post.frontmatter.tags
+                        ? post.frontmatter.tags.split(" ")
+                        : [];
+
+                    return (
+                        <article class="post-item">
+                            <header class="post-header">
+                                <h2 class="post-title">
+                                    <a href={`/posts/${slug}`}>
+                                        {post.frontmatter.title || slug}
+                                    </a>
+                                </h2>
+                                {date && (
+                                    <time class="post-date" datetime={date}>
+                                        {new Date(date).toLocaleDateString(
+                                            "en-US",
+                                            {
+                                                year: "numeric",
+                                                month: "long",
+                                                day: "numeric",
+                                            },
+                                        )}
+                                    </time>
+                                )}
+                            </header>
+
+                            {tags.length > 0 && (
+                                <div class="post-tags">
+                                    {tags.map((tagName) => (
+                                        <a
+                                            href={`/tags/${tagName}`}
+                                            class="tag"
+                                        >
+                                            {tagName}
+                                        </a>
+                                    ))}
+                                </div>
+                            )}
+
+                            {excerpt && (
+                                <div class="post-preview">
+                                    <Fragment set:html={excerpt} />
+                                </div>
+                            )}
+
+                            <footer class="post-footer">
+                                <a href={`/posts/${slug}`} class="read-more">
+                                    Read more
+                                </a>
+                            </footer>
+                        </article>
+                    );
+                })
+            }
+        </div>
+
+        {
+            totalPages > 1 && (
+                <Pagination
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    generatePageUrl={generatePageUrl}
+                />
+            )
+        }
+    </div>
+</BaseLayout>
