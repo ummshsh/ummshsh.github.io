@@ -68,6 +68,11 @@ function getMicroPostContent(post: any): string {
             '<img src="$2" alt="$1" style="max-width: 100%; height: auto;" class="clickableimg">',
         );
 
+        processedContent = processedContent.replace(
+            /\(\:\:([^)]+)\)/g,
+            '<span class="hover-footnote" data-title="$1">*</span>',
+        );
+
         // Convert markdown links: [text](url) -> <a href="url">text</a>
         processedContent = processedContent.replace(
             /\[([^\]]+)\]\(([^)]+)\)/g,

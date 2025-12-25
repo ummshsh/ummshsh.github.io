@@ -3,38 +3,49 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
 import Pagination from "../../components/Pagination.astro";
 
 export async function getStaticPaths() {
-    // Get all post files directly
-    const postFiles = import.meta.glob("../../posts/*.md", { eager: true });
+    // 1. CHANGE: Look at posts_micro, not posts
+    // Also use the specific query parameters for microblogs (?raw)
+    const microPostFiles = import.meta.glob("../../posts_micro/*.md", {
+        eager: true,
+        query: "?raw",
+        import: "default",
+    });
 
-    // Process posts manually
-    const allPosts = Object.entries(postFiles)
-        .map(([path, file]: [string, any]) => ({
-            file: path,
-            frontmatter: file.frontmatter || {},
-            rawContent: file.rawContent,
-            compiledContent: file.compiledContent,
-            Content: file.Content,
-        }))
-        .filter((post) => !post.frontmatter.hidden)
-        .sort((a, b) => {
-            const getDateFromPath = (path: string) => {
-                const match = path.match(/(\d{4}-\d{1,2}-\d{1,2})/);
-                return match ? match[1] : "";
+    // 2. CHANGE: Use the Microblog processing logic (copying from your microblog index)
+    const allMicroPosts = Object.entries(microPostFiles)
+        .map(([path, rawContent]: [string, any]) => {
+            return {
+                file: path,
+                rawContent: rawContent.trim(),
             };
-            const dateA = getDateFromPath(a.file);
-            const dateB = getDateFromPath(b.file);
-            return dateB.localeCompare(dateA);
+        })
+        .filter((post) => post.rawContent.length > 0)
+        .sort((a, b) => {
+            // Helper defined inside getStaticPaths for sorting
+            const getDateTimeFromPath = (path: string) => {
+                const match = path.match(
+                    /(\d{4})-(\d{1,2})-(\d{1,2})-(\d{1,2})-(\d{1,2})-(\d{1,2})/,
+                );
+                if (match) {
+                    const [, year, month, day, hour, minute, second] = match;
+                    return `${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}T${hour.padStart(2, "0")}:${minute.padStart(2, "0")}:${second.padStart(2, "0")}`;
+                }
+                return "";
+            };
+            const dateTimeA = getDateTimeFromPath(a.file);
+            const dateTimeB = getDateTimeFromPath(b.file);
+            return dateTimeB.localeCompare(dateTimeA);
         });
 
-    const postsPerPage = 10;
-    const totalPages = Math.ceil(allPosts.length / postsPerPage);
+    const postsPerPage = 20; // Matches your microblog index settings
+    const totalPages = Math.ceil(allMicroPosts.length / postsPerPage);
 
     // Generate paths for pages 2 and beyond
     return Array.from({ length: totalPages - 1 }, (_, i) => {
         const pageNum = i + 2;
         const startIndex = (pageNum - 1) * postsPerPage;
         const endIndex = startIndex + postsPerPage;
-        const paginatedPosts = allPosts.slice(startIndex, endIndex);
+        const paginatedPosts = allMicroPosts.slice(startIndex, endIndex);
 
         return {
             params: { page: pageNum.toString() },
@@ -42,64 +53,55 @@ export async function getStaticPaths() {
                 paginatedPosts,
                 currentPage: pageNum,
                 totalPages,
-                totalPosts: allPosts.length,
-                startIndex,
-                endIndex,
-                allPosts,
             },
         };
     });
 }
 
-const {
-    paginatedPosts,
-    currentPage,
-    totalPages,
-    totalPosts,
-    startIndex,
-    endIndex,
-} = Astro.props;
+const { paginatedPosts, currentPage, totalPages } = Astro.props;
 
-// Helper functions
+// --- HELPER FUNCTIONS (Specific to Microblog) ---
+
 function getSlugFromPath(path: string): string {
     return path.split("/").pop()?.replace(".md", "") || "";
 }
 
-function getDateFromPath(path: string): string {
-    const match = path.match(/(\d{4}-\d{1,2}-\d{1,2})/);
+function getDateTimeFromPath(path: string): string {
+    const match = path.match(
+        /(\d{4})-(\d{1,2})-(\d{1,2})-(\d{1,2})-(\d{1,2})-(\d{1,2})/,
+    );
     if (match) {
-        const parts = match[1].split("-");
-        const year = parts[0];
-        const month = parts[1].padStart(2, "0");
-        const day = parts[2].padStart(2, "0");
-        return `${year}-${month}-${day}`;
+        const [, year, month, day, hour, minute, second] = match;
+        return `${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}T${hour.padStart(2, "0")}:${minute.padStart(2, "0")}:${second.padStart(2, "0")}`;
     }
     return "";
 }
 
-function getExcerpt(post: any): string | null {
+function formatMicroblogDate(dateTimeString: string): string {
+    const d = new Date(dateTimeString);
+    if (isNaN(d.getTime())) return dateTimeString;
+
+    const datePart = d.toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "short",
+        day: "numeric",
+    });
+    const hours = d.getHours().toString().padStart(2, "0");
+    const minutes = d.getMinutes().toString().padStart(2, "0");
+
+    return `${datePart}, ${hours}:${minutes}`;
+}
+
+function getMicroPostContent(post: any): string {
     try {
-        let rawContent = "";
-        if (typeof post.rawContent === "function") {
-            rawContent = post.rawContent();
-        } else if (typeof post.rawContent === "string") {
-            rawContent = post.rawContent;
-        } else {
-            return null;
-        }
+        let processedContent = post.rawContent;
+        if (processedContent.length === 0) return "";
 
-        const moreIndex = rawContent.indexOf("<!--more-->");
-        if (moreIndex === -1) return null;
-
-        const beforeMore = rawContent.substring(0, moreIndex);
-        const withoutFrontmatter = beforeMore.replace(/^---[\s\S]*?---\s*/, "");
-
-        if (withoutFrontmatter.trim().length === 0) return null;
-
-        let processedContent = withoutFrontmatter.trim();
+        processedContent = processedContent.replace(/\{\{site\.url\}\}/g, "");
+        processedContent = processedContent.replace(/\{:[^}]+\}/g, "");
         processedContent = processedContent.replace(
             /!\[([^\]]*)\]\(([^)]+)\)/g,
-            '<img src="$2" alt="$1" style="max-width: 100%; height: auto;">',
+            '<img src="$2" alt="$1" style="max-width: 100%; height: auto;" class="clickableimg">',
         );
         processedContent = processedContent.replace(
             /\(\:\:([^)]+)\)/g,
@@ -109,89 +111,46 @@ function getExcerpt(post: any): string | null {
             /\[([^\]]+)\]\(([^)]+)\)/g,
             '<a href="$2">$1</a>',
         );
-        processedContent = processedContent.replace(
-            /^>\s*(.+)$/gm,
-            '<blockquote>$1</blockquote>',
-        );
         processedContent = processedContent.replace(/\n/g, "<br>");
 
         return processedContent;
     } catch (error) {
-        return null;
+        return "";
     }
 }
 
+// 3. CHANGE: Update URL generation to point to microblog
 function generatePageUrl(page: number): string {
-    if (page === 1) return "/";
-    return `/page/${page}`;
+    if (page === 1) return "/microblog";
+    return `/microblog/${page}`;
 }
 ---
 
-<BaseLayout title={`Blog - Page ${currentPage}`}>
+<BaseLayout title={`Microblog - Page ${currentPage}`}>
     <div class="posts-container">
         <div class="posts-list">
             {
                 paginatedPosts.map((post) => {
                     const slug = getSlugFromPath(post.file);
-                    const date = getDateFromPath(post.file);
-                    const excerpt = getExcerpt(post);
-                    const tags = post.frontmatter.tags
-                        ? post.frontmatter.tags.split(" ")
-                        : [];
+                    const dateTime = getDateTimeFromPath(post.file);
+                    const content = getMicroPostContent(post);
 
                     return (
                         <article class="post-item">
                             <header class="post-header">
                                 <h2 class="post-title">
-                                    <a href={`/posts/${slug}`}>
-                                        {post.frontmatter.title || slug}
+                                    <a href={`/microblog/${slug}`}>
+                                        {formatMicroblogDate(dateTime)}
                                     </a>
                                 </h2>
-                                {date && (
-                                    <time class="post-date" datetime={date}>
-                                        {new Date(date).toLocaleDateString(
-                                            "en-US",
-                                            {
-                                                year: "numeric",
-                                                month: "long",
-                                                day: "numeric",
-                                            },
-                                        )}
-                                    </time>
-                                )}
                             </header>
-
-                            {tags.length > 0 && (
-                                <div class="post-tags">
-                                    {tags.map((tag) => (
-                                        <a href={`/tags/${tag}`} class="tag">
-                                            {tag}
-                                        </a>
-                                    ))}
-                                </div>
-                            )}
-
-                            {excerpt && (
-                                <div class="post-preview">
-                                    <Fragment set:html={excerpt} />
-                                </div>
-                            )}
-
-                            <footer class="post-footer">
-                                <a href={`/posts/${slug}`} class="read-more">
-                                    Read more →
-                                </a>
-                            </footer>
+                            <div class="post-content">
+                                <Fragment set:html={content} />
+                            </div>
                         </article>
                     );
                 })
             }
-        </div>
-
-        <div class="pagination-info">
-            Showing {startIndex + 1}-{Math.min(endIndex, totalPosts)} of {
-                totalPosts
-            } posts
         </div>
 
         <Pagination
@@ -201,3 +160,21 @@ function generatePageUrl(page: number): string {
         />
     </div>
 </BaseLayout>
+
+<style>
+    .post-content :global(img) {
+        margin: 1rem 0;
+        border-radius: 4px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        max-width: 100%;
+        height: auto;
+    }
+    .post-content :global(iframe) {
+        margin: 1rem 0;
+        max-width: 100%;
+    }
+    @media (max-width: 768px) {
+        .posts-container { padding: 1rem; }
+        .post-content :global(iframe) { width: 100%; height: 200px; }
+    }
+</style>

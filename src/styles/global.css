@@ -51,6 +51,7 @@
 html, body {
     width: 100%;
     overflow-x: hidden;
+    scroll-behavior: auto !important;
 }
 
 body {
@@ -714,6 +715,9 @@ figure.highlight { margin: 5px 0; }
     background: #bbeeff;
     border-radius: 50%;
     opacity: 0.4;
+
+    will-change: transform;
+    backface-visibility: hidden;
 }
 
 @keyframes snow-fall-1 { to { transform: translate(10vw, 100vh) scale(0.8); } }
