@@ -150,7 +150,7 @@ a:hover {
    ========================================= */
 header {
     padding: 2.5rem 0 1rem 0;
-    background-color: var(--background-color);
+    /*background-color: var(--background-color);*/
     position: static;
     margin-top: 16px;
     margin-bottom: 10px;
