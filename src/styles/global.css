@@ -5,7 +5,8 @@
    ========================================= */
 :root {
     /* UI Colors */
-    --background-color: #0f172a;       /* Deep Navy/Slate */
+    --background-color: #0f172a;
+    --background-color-dark: #020617;    /* Deep Navy/Slate */
     --background-color-pre: #1e293b;   /* Lighter Slate */
     --text-color: #e2e8f0;             /* Cool White */
     --base-color: #e2e8f0;
@@ -58,11 +59,24 @@ body {
     font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     line-height: 2;
     color: var(--text-color);
-    background-color: var(--background-color);
-    text-align: left;
 
+
+    background-color: var(--background-color);
+
+    /* Create the gradient */
+    background-image: linear-gradient(to bottom, var(--background-color-dark), var(--background-color));
+    background-attachment: fixed;
+
+    text-align: left;
     overflow-x: hidden;
     width: 100%;
+
+    /* Ensure the body is at least the height of the screen */
+    min-height: 100vh;
+
+    -webkit-hyphens: auto; /* For Safari/Chrome compatibility */
+    hyphens: auto;         /* Standard */
+    overflow-wrap: break-word;
 }
 
 /* =========================================
@@ -543,31 +557,84 @@ table th { font-weight: bold; }
 .clickableimg { cursor: pointer; }
 
 /* Hover Footnotes */
-.hover-footnote { text-decoration: dotted underline; cursor: help; position: relative; }
+/* Base styles (Desktop) */
+.hover-footnote {
+    text-decoration: dotted underline;
+    cursor: help;
+    position: relative;
+}
+
 .hover-footnote::after {
     content: attr(data-title);
-    position: absolute;
-    background: var(--background-color);
+
+    /* Appearance */
+    background: var(--background-color); /* Or use --background-color-pre for contrast */
     color: var(--text-color);
-    border: 1px solid var(--text-color);
-    padding: 5px 8px;
-    border-radius: 4px;
-    font-size: 1em;
-    box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.2);
-    z-index: 1000;
+    border: 1px solid var(--border-color); /* Changed to border-color var */
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.5);
+    line-height: 1.5;
+    text-align: left;
+
+    /* Sizing */
     width: max-content;
     max-width: 300px;
+
+    /* Logic to handle text wrapping */
+    white-space: normal;
     overflow-wrap: break-word;
-    word-wrap: break-word;
     hyphens: auto;
-    line-height: 1.4;
-    text-align: left;
+
+    /* Initial State */
     opacity: 0;
     pointer-events: none;
-    transition: opacity 0.2s ease;
-}
-.hover-footnote:hover::after { opacity: 1; pointer-events: auto; }
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    z-index: 1000;
 
+    /* POSITIONING (Desktop) - Center it above the asterisk */
+    position: absolute;
+    bottom: 100%;       /* Position above the text */
+    left: 50%;          /* Move to middle of asterisk */
+    transform: translateX(-50%) translateY(10px); /* Center perfectly horizontally */
+    margin-bottom: 8px; /* Small gap */
+}
+
+/* Hover State */
+.hover-footnote:hover::after {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateX(-50%) translateY(0); /* Little float up animation */
+}
+
+/* --- MOBILE SPECIFIC FIX --- */
+@media (max-width: 768px) {
+    .hover-footnote:hover::after {
+        /* Break the link to the asterisk and fix to screen */
+        position: fixed;
+
+        /* Position at bottom of screen (Snackbar style) */
+        bottom: 20px;
+        left: 20px;
+        right: 20px;
+
+        /* Reset Desktop transforms */
+        transform: none;
+        margin: 0;
+
+        /* Force width to fit screen */
+        width: auto;
+        max-width: none;
+
+        /* Ensure it sits on top of everything */
+        z-index: 9999;
+
+        /* Add a darker border/bg to pop out on mobile */
+        background: var(--background-color-pre);
+        border: 1px solid var(--primary-color);
+    }
+}
 /* =========================================
    Error Page (404)
    ========================================= */
