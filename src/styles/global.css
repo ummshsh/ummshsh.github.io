@@ -718,6 +718,7 @@ figure.highlight { margin: 5px 0; }
 
     will-change: transform;
     backface-visibility: hidden;
+    z-index: -1;
 }
 
 @keyframes snow-fall-1 { to { transform: translate(10vw, 100vh) scale(0.8); } }

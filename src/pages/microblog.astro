@@ -109,31 +109,54 @@ function formatMicroblogDate(dateTimeString: string): string {
 function getMicroPostContent(post: any): string {
     try {
         let processedContent = post.rawContent;
+        if (!processedContent) return "";
 
-        if (processedContent.length === 0) return "";
+        // 1. Normalize line endings (fixes list issues on Windows/Linux mix)
+        processedContent = processedContent.replace(/\r\n/g, "\n");
 
-        processedContent = processedContent.replace(/\{\{site\.url\}\}/g, "");
+        // 2. Remove Jekyll specific syntax
+        // Matches {{site.url}} or {{ site.url }} with spaces
+        processedContent = processedContent.replace(/\{\{\s*site\.url\s*\}\}/g, "");
+        // Remove {: .class } style attributes
         processedContent = processedContent.replace(/\{:[^}]+\}/g, "");
 
-        // Convert markdown images
+        // 3. Convert Markdown Images
+        // MUST be done before lists or tooltips
         processedContent = processedContent.replace(
             /!\[([^\]]*)\]\(([^)]+)\)/g,
             '<img src="$2" alt="$1" style="max-width: 100%; height: auto;" class="clickableimg">',
         );
 
-        // Convert tooltip syntax
+        // 4. Convert Tooltips
         processedContent = processedContent.replace(
             /\(\:\:([^)]+)\)/g,
             '<span class="hover-footnote" data-title="$1">*</span>',
         );
 
-        // Convert markdown links
+        // 5. Convert Markdown Links
         processedContent = processedContent.replace(
             /\[([^\]]+)\]\(([^)]+)\)/g,
             '<a href="$2">$1</a>',
         );
 
-        // Convert line breaks
+        // 6. Handle Lists (The fixed logic)
+        // Step A: Convert lines starting with "- " or "* " to <li>
+        processedContent = processedContent.replace(
+            /^[\s]*[-*]\s+(.*)$/gm,
+            '<li>$1</li>'
+        );
+
+        // Step B: Wrap consecutive <li> items in <ul>
+        processedContent = processedContent.replace(
+            /((?:<li>.*<\/li>(?:\n|$))+)/g,
+            (match) => {
+                // Remove newlines inside the list block so they don't become <br>
+                const cleanList = match.replace(/\n/g, "");
+                return `<ul>${cleanList}</ul>`;
+            }
+        );
+
+        // 7. Convert remaining newlines to <br> tags
         processedContent = processedContent.replace(/\n/g, "<br>");
 
         return processedContent;
