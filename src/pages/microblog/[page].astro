@@ -160,21 +160,3 @@ function generatePageUrl(page: number): string {
         />
     </div>
 </BaseLayout>
-
-<style>
-    .post-content :global(img) {
-        margin: 1rem 0;
-        border-radius: 4px;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-        max-width: 100%;
-        height: auto;
-    }
-    .post-content :global(iframe) {
-        margin: 1rem 0;
-        max-width: 100%;
-    }
-    @media (max-width: 768px) {
-        .posts-container { padding: 1rem; }
-        .post-content :global(iframe) { width: 100%; height: 200px; }
-    }
-</style>

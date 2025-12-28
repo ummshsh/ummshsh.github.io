@@ -340,11 +340,11 @@ main {
     margin: 0;
 }
 
-.post-item,
+/*.post-item,
 .microblog-item {
     padding-bottom: 0;
     margin-bottom: 0.16rem;
-}
+}*/
 
 .post-header,
 .microblog-header {
@@ -356,8 +356,8 @@ main {
 }
 
 /* Single Post Specifics */
-.post .post-header { margin-bottom: 2rem; }
-.post .post-title { font-size: 2rem; margin-bottom: 1rem; }
+/*.post .post-header { margin-bottom: 2rem; }*/
+/*.post .post-title { font-size: 2rem; margin-bottom: 1rem; }*/
 .post .post-date { margin-bottom: 1rem; display: block; }
 
 .post-title {

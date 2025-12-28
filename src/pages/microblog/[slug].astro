@@ -148,9 +148,8 @@ const pageTitle = formatMicroblogTitle(dateTime);
 <BaseLayout title={`Microblog - ${pageTitle}`}>
     <!-- Single post container -->
     <div class="post">
-        <article>
+        <article class="post-item">
             <header class="post-header">
-                <!-- Title is the 24h date string -->
                 <h1 class="post-title">
                     {pageTitle}
                 </h1>
@@ -161,29 +160,3 @@ const pageTitle = formatMicroblogTitle(dateTime);
         </article>
     </div>
 </BaseLayout>
-
-<style>
-    /*
-       Most styles are now handled by global .post, .post-header, .post-content classes.
-       We only keep specific fixes for inner content.
-    */
-    .post-content :global(img) {
-        margin: 1rem 0;
-        border-radius: 4px;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-        max-width: 100%;
-        height: auto;
-    }
-
-    .post-content :global(iframe) {
-        margin: 1rem 0;
-        max-width: 100%;
-    }
-
-    @media (max-width: 768px) {
-        .post-content :global(iframe) {
-            width: 100%;
-            height: 200px;
-        }
-    }
-</style>
