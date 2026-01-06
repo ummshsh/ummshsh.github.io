@@ -3,42 +3,40 @@
 /* =========================================
    Variables
    ========================================= */
-:root {
-    /* UI Colors */
-    --background-color: #0f172a;
-    --background-color-dark: #020617;    /* Deep Navy/Slate */
-    --background-color-pre: #1e293b;   /* Lighter Slate */
-    --text-color: #e2e8f0;             /* Cool White */
-    --base-color: #e2e8f0;
-    --link-color: #22d3ee;             /* Cyan/Electric Blue */
-    --selection-background: #0ea5e9;
-    --selection-text: #ffffff;
-    --placeholder-color: #64748b;
-    --border: 1px solid #334155;
-    --primary-color: #2dd4bf;          /* Teal */
-    --text-muted: #94a3b8;
-    --border-color: #334155;
+   :root {
+       --background-color: #0f0407;
+       --background-color-dark: #000000;
+       --background-color-pre: #18181b;
+       --text-color: #f4f4f5;
+       --base-color: #f4f4f5;
+       --link-color: #ef4444;
+       --selection-background: #7f1d1d;
+       --selection-text: #ffffff;
+       --placeholder-color: #52525b;
+       --border: 1px solid #27272a;
+       --primary-color: #f87171;
+       --text-muted: #a1a1aa;
+       --border-color: #27272a;
 
-    /* Syntax Highlighting (Cool Tones) */
-    --code-color-1: #64748b;
-    --code-color-2: #334155;
-    --code-color-3: #f472b6;  /* Pink */
-    --code-color-4: #be185d;
-    --code-color-5: #38bdf8;  /* Sky Blue */
-    --code-color-6: #818cf8;  /* Indigo */
-    --code-color-7: #f472b6;
-    --code-color-8: #e2e8f0;
-    --code-color-9: #2dd4bf;  /* Teal */
-    --code-color-10: #94a3b8;
-    --code-color-11: #fbbf24; /* Gold (for contrast) */
-    --code-color-12: #22d3ee;
-    --code-color-13: #c084fc; /* Purple */
-    --code-color-14: #f87171;
-    --code-color-15: #4ade80; /* Green */
-    --code-color-16: #fb7185;
-    --code-color-17: #f59e0b;
-    --code-color-18: #1e293b;
-}
+       --code-color-1: #71717a;
+       --code-color-2: #18181b;
+       --code-color-3: #f87171;
+       --code-color-4: #7f1d1d;
+       --code-color-5: #e4e4e7;
+       --code-color-6: #a1a1aa;
+       --code-color-7: #fca5a5;
+       --code-color-8: #ffffff;
+       --code-color-9: #ef4444;
+       --code-color-10: #71717a;
+       --code-color-11: #d4d4d8;
+       --code-color-12: #f87171;
+       --code-color-13: #dc2626;
+       --code-color-14: #b91c1c;
+       --code-color-15: #27272a;
+       --code-color-16: #ef4444;
+       --code-color-17: #450a0a;
+       --code-color-18: #09090b;
+   }
 
 /* =========================================
    Reset & Base
@@ -126,7 +124,7 @@ ul ul, ol ol, ul ol, ol ul {
 a {
     text-decoration: underline;
     color: var(--link-color);
-    transition: all 0.2s ease;
+    /*transition: all 0.2s ease;*/
     border-radius: 4px; /* Matches header rounded corners */
 }
 
@@ -211,13 +209,17 @@ header {
     color: var(--text-color);
     font-weight: 500;
     font-family: "Manrope", sans-serif;
+    border-radius: 4px;
+
+    padding: 3px 8px;
+    margin: 0 -4px;
 }
 
 .nav a:hover {
     text-decoration: none;
     color: var(--background-color) !important;
     background-color: var(--base-color);
-    border-radius: 4px;
+    box-shadow: none;
 }
 
 .nav a.active {
@@ -296,7 +298,7 @@ main {
     overflow-x: auto;
     margin: 1rem 0;
     border: none;
-    font-size: 1.2em;
+    /*font-size: 1.2em;*/
     color: var(--text-color);
     font-family: "Roboto Mono", Monaco, Consolas, "Liberation Mono", monospace;
     line-height: 1;
@@ -370,7 +372,6 @@ main {
 .post-title a {
     text-decoration: none;
     color: var(--text-color);
-    transition: color 0.2s ease;
 }
 
 .post-title a:hover {
@@ -404,10 +405,7 @@ main {
     text-decoration: none;
     font-weight: 500;
     font-size: 0.95rem;
-    transition: color 0.2s ease;
 }
-
-/* Inherits global a:hover style now */
 
 .post-footer {
     margin-top: 0.24rem;
@@ -490,7 +488,6 @@ main {
     border: none;
     border-radius: 6px;
     font-weight: 500;
-    transition: all 0.2s ease;
     min-width: 40px;
     min-height: 40px;
     background: transparent;
@@ -499,20 +496,20 @@ main {
 }
 
 .pagination-link:hover {
-    color: var(--background-color);
+    color: var(--link-color);
     background-color: var(--base-color);
 }
 
 .pagination-current {
     background-color: var(--base-color);
-    color: var(--background-color);
-    border: 1px solid var(--link-color);
+    color: var(--link-color);
+    /*border: 1px solid var(--base-color);*/
     font-weight: 600;
 }
 
 .pagination-current:hover {
-    background-color: var(--link-color);
-    color: var(--background-color);
+    background-color: var(--base-color);
+    color: var(--link-color);
 }
 
 /* =========================================
@@ -566,11 +563,9 @@ table th { font-weight: bold; }
 
 .hover-footnote::after {
     content: attr(data-title);
-
-    /* Appearance */
-    background: var(--background-color); /* Or use --background-color-pre for contrast */
+    background: var(--background-color-pre);
     color: var(--text-color);
-    border: 1px solid var(--border-color); /* Changed to border-color var */
+    border: 1px solid var(--link-color); /* Changed to border-color var */
     padding: 8px 12px;
     border-radius: 6px;
     font-size: 0.9rem;
@@ -642,24 +637,6 @@ table th { font-weight: bold; }
 .error-header { margin-bottom: 2rem; }
 .error-title { font-size: 4rem; font-weight: bold; margin-bottom: 0.5rem; }
 .error-subtitle { font-size: 1.2rem; margin-bottom: 0; }
-.error-content { text-align: left; line-height: 1.8; }
-.error-content p { margin-bottom: 2rem; }
-.error-links { display: flex; gap: 1rem; margin-bottom: 3rem; flex-wrap: wrap; }
-.error-link, .recent-post-link {
-    color: var(--link-color);
-    text-decoration: underline;
-    transition: all 0.2s ease;
-    padding: 0.5rem 0;
-}
-.error-link:hover, .recent-post-link:hover {
-    color: var(--background-color);
-    background-color: var(--code-color-16);
-    text-decoration: none;
-    padding: 0.5rem 0.75rem;
-    border-radius: 4px;
-}
-.recent-posts { border-top: var(--border); padding-top: 2rem; }
-.recent-posts h2 { font-size: 1.5rem; margin-bottom: 1rem; }
 
 /* =========================================
    Media Queries
@@ -764,48 +741,3 @@ figure.highlight { margin: 5px 0; }
 .highlight .vg { color: var(--code-color-7); }
 .highlight .vi { color: var(--code-color-7); }
 .highlight .il { color: var(--code-color-14); }
-
-/* =========================================
-   Snow Effect
-   ========================================= */
-.snow-container {
-    position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    pointer-events: none;
-    z-index: -1;
-}
-
-.snow {
-    position: absolute;
-    width: 10px; height: 10px;
-    background: #bbeeff;
-    border-radius: 50%;
-    opacity: 0.4;
-
-    will-change: transform;
-    backface-visibility: hidden;
-    z-index: -1;
-}
-
-@keyframes snow-fall-1 { to { transform: translate(10vw, 100vh) scale(0.8); } }
-@keyframes snow-fall-2 { to { transform: translate(-5vw, 100vh) scale(0.6); } }
-@keyframes snow-fall-3 { to { transform: translate(15vw, 100vh) scale(1.2); } }
-@keyframes snow-fall-4 { to { transform: translate(-10vw, 100vh) scale(0.9); } }
-@keyframes snow-fall-5 { to { transform: translate(8vw, 100vh) scale(0.7); } }
-@keyframes snow-fall-6 { to { transform: translate(-3vw, 100vh) scale(1.1); } }
-@keyframes snow-fall-7 { to { transform: translate(12vw, 100vh) scale(0.5); } }
-@keyframes snow-fall-8 { to { transform: translate(-8vw, 100vh) scale(1); } }
-@keyframes snow-fall-9 { to { transform: translate(6vw, 100vh) scale(0.8); } }
-@keyframes snow-fall-10 { to { transform: translate(-12vw, 100vh) scale(0.9); } }
-
-.snow:nth-child(1) { left: 10%; animation: snow-fall-1 15s linear infinite; }
-.snow:nth-child(2) { left: 20%; animation: snow-fall-2 18s linear infinite; }
-.snow:nth-child(3) { left: 30%; animation: snow-fall-3 12s linear infinite; }
-.snow:nth-child(4) { left: 40%; animation: snow-fall-4 20s linear infinite; }
-.snow:nth-child(5) { left: 50%; animation: snow-fall-5 16s linear infinite; }
-.snow:nth-child(6) { left: 60%; animation: snow-fall-6 14s linear infinite; }
-.snow:nth-child(7) { left: 70%; animation: snow-fall-7 22s linear infinite; }
-.snow:nth-child(8) { left: 80%; animation: snow-fall-8 11s linear infinite; }
-.snow:nth-child(9) { left: 90%; animation: snow-fall-9 19s linear infinite; }
-.snow:nth-child(10) { left: 5%; animation: snow-fall-10 17s linear infinite; }

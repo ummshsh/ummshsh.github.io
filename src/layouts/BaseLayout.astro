@@ -13,7 +13,6 @@ import "../styles/global.css";
         <meta charset="UTF-8" />
         <meta name="description" content="Astro description" />
         <meta name="viewport" content="width=device-width" />
-        <!-- Favicon -->
         <link
             rel="apple-touch-icon"
             sizes="180x180"
@@ -56,7 +55,7 @@ import "../styles/global.css";
                 <div class="header-content">
                     <a href="/" class="logo">
                         <img
-                            src="/assets/images/logo/loves vector.svg"
+                            src="/assets/images/logo/loves_vector.svg"
                             alt="Logo"
                         />
                     </a>
@@ -92,82 +91,5 @@ import "../styles/global.css";
                 <slot />
             </div>
         </main>
-        <script is:inline>
-            // Hover footnotes positioning
-            document.addEventListener("DOMContentLoaded", function () {
-                // Clickable images
-                document.querySelectorAll(".clickableimg").forEach((img) => {
-                    img.addEventListener("click", function () {
-                        window.location.href = this.src;
-                    });
-                });
-
-                // Snow effect function
-                function createSnowflakes() {
-                    // Remove existing snow container if it exists
-                    const existing = document.querySelector(".snow-container");
-                    if (existing) {
-                        existing.remove();
-                    }
-
-                    const snowContainer = document.createElement("div");
-                    snowContainer.style.position = "fixed";
-                    snowContainer.style.top = "0";
-                    snowContainer.style.left = "0";
-                    snowContainer.style.width = "100vw";
-                    snowContainer.style.height = "100vh";
-                    snowContainer.style.pointerEvents = "none";
-                    snowContainer.style.zIndex = "-1";
-                    snowContainer.classList.add("snow-container");
-
-                    document.body.appendChild(snowContainer);
-
-                    const totalSnowflakes = 200;
-
-                    for (let i = 0; i < totalSnowflakes; i++) {
-                        const snowflake = document.createElement("div");
-                        snowflake.classList.add("snow");
-
-                        // Random positioning and animation
-                        const randomX = Math.random() * 100;
-                        const randomDelay = Math.random() * -30;
-                        const randomDuration = Math.random() * 20 + 10;
-                        const randomOpacity = Math.random() * 0.8 + 0.2;
-                        const randomSize = Math.random() * 8 + 2;
-                        const randomEndX = randomX + (Math.random() - 0.5) * 40;
-
-                        snowflake.style.left = randomX + "%";
-                        snowflake.style.opacity = randomOpacity.toString();
-                        snowflake.style.width = randomSize + "px";
-                        snowflake.style.height = randomSize + "px";
-                        snowflake.style.animationDelay = randomDelay + "s";
-                        snowflake.style.animationDuration =
-                            randomDuration + "s";
-
-                        // Create unique animation for each snowflake
-                        const keyframeName = `snowfall-${i}`;
-                        const keyframes = `
-                    @keyframes ${keyframeName} {
-                      to {
-                        transform: translate(${randomEndX - randomX}vw, 100vh) scale(${Math.random() * 0.5 + 0.5});
-                      }
-                    }
-                  `;
-
-                        // Inject the keyframe
-                        const style = document.createElement("style");
-                        style.textContent = keyframes;
-                        document.head.appendChild(style);
-
-                        snowflake.style.animation = `${keyframeName} ${randomDuration}s linear infinite ${randomDelay}s`;
-
-                        snowContainer.appendChild(snowflake);
-                    }
-                }
-
-                // Enable/disable snow by commenting/uncommenting the line below:
-                createSnowflakes();
-            });
-        </script>
     </body>
 </html>
