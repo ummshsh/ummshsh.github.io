@@ -66,22 +66,28 @@ function getMicroPostContent(post: any): string {
         // MUST be done before lists or tooltips
         processedContent = processedContent.replace(
             /!\[([^\]]*)\]\(([^)]+)\)/g,
-            '<img src="$2" alt="$1" style="max-width: 100%; height: auto;" class="clickableimg">',
+            '<img src="$2" alt="$1" style="max-width: 100%; height: auto;" class="clickableimg">'
         );
 
         // 4. Convert Tooltips
         processedContent = processedContent.replace(
             /\(\:\:([^)]+)\)/g,
-            '<span class="hover-footnote" data-title="$1">*</span>',
+            '<span class="hover-footnote" data-title="$1">*</span>'
         );
 
         // 5. Convert Markdown Links
         processedContent = processedContent.replace(
             /\[([^\]]+)\]\(([^)]+)\)/g,
-            '<a href="$2">$1</a>',
+            '<a href="$2">$1</a>'
         );
 
-        // 6. Handle Lists (The fixed logic)
+        // 6. Convert markdown blockquotes: > text -> <blockquote>text</blockquote>
+        processedContent = processedContent.replace(
+            /^>\s*(.+)$/gm,
+            '<blockquote>$1</blockquote>'
+        );
+
+        // 7. Handle Lists (The fixed logic)
         // Step A: Convert lines starting with "- " or "* " to <li>
         processedContent = processedContent.replace(
             /^[\s]*[-*]\s+(.*)$/gm,
@@ -98,8 +104,14 @@ function getMicroPostContent(post: any): string {
             }
         );
 
-        // 7. Convert remaining newlines to <br> tags
+
+        // Avoid adding <br> right after blockquotes and images (handle spaces and CRLF)
+        processedContent = processedContent.replace(/<\/blockquote>\s*\r?\n+/g, "</blockquote>");
+        processedContent = processedContent.replace(/(<img[^>]*>)\s*\r?\n+/g, "$1");
+
+        // 8. Convert remaining newlines to <br> tags
         processedContent = processedContent.replace(/\n/g, "<br>");
+
 
         return processedContent;
     } catch (error) {

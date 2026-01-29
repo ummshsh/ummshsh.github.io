@@ -97,21 +97,53 @@ function getMicroPostContent(post: any): string {
         let processedContent = post.rawContent;
         if (processedContent.length === 0) return "";
 
-        processedContent = processedContent.replace(/\{\{site\.url\}\}/g, "");
-        processedContent = processedContent.replace(/\{:[^}]+\}/g, "");
+        // Remove Jekyll/other syntax
+        processedContent = processedContent.replace(/{{site\.url}}/g, "");
+        processedContent = processedContent.replace(/:{[^}]+}/g, "");
+
+        // Convert markdown images: ![alt](src) -> <img src="src" alt="alt">
         processedContent = processedContent.replace(
             /!\[([^\]]*)\]\(([^)]+)\)/g,
-            '<img src="$2" alt="$1" style="max-width: 100%; height: auto;" class="clickableimg">',
+            '<img src="$2" alt="$1" style="max-width: 100%; height: auto;" class="clickableimg">'
         );
+
+        // Convert tooltip syntax: (::tooltip text) -> <span class="hover-footnote" data-title="tooltip text">*</span>
         processedContent = processedContent.replace(
             /\(\:\:([^)]+)\)/g,
-            '<span class="hover-footnote" data-title="$1">*</span>',
+            '<span class="hover-footnote" data-title="$1">*</span>'
         );
+
+        // Convert markdown links: [text](url) -> <a href="url">text</a>
         processedContent = processedContent.replace(
             /\[([^\]]+)\]\(([^)]+)\)/g,
-            '<a href="$2">$1</a>',
+            '<a href="$2">$1</a>'
         );
+
+        // Convert markdown blockquotes: > text -> <blockquote>text</blockquote>
+        processedContent = processedContent.replace(
+            /^>\s*(.+)$/gm,
+            '<blockquote>$1</blockquote>'
+        );
+
+
+
+
+        // Avoid adding <br> right after blockquotes and images
+
+        // Handle optional spaces and CRLF/LF newlines robustly
+        processedContent = processedContent.replace(/<\/blockquote>\s*\r?\n+/g, "</blockquote>");
+
+        processedContent = processedContent.replace(/(<img[^>]*>)\s*\r?\n+/g, "$1");
+
+
+
+        // Convert line breaks to <br> tags
+
         processedContent = processedContent.replace(/\n/g, "<br>");
+
+
+
+
 
         return processedContent;
     } catch (error) {

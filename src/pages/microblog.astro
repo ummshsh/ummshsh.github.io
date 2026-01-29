@@ -133,31 +133,53 @@ function getMicroPostContent(post: any): string {
             '<span class="hover-footnote" data-title="$1">*</span>',
         );
 
+
         // 5. Convert Markdown Links
         processedContent = processedContent.replace(
+
             /\[([^\]]+)\]\(([^)]+)\)/g,
+
             '<a href="$2">$1</a>',
+
         );
 
-        // 6. Handle Lists (The fixed logic)
+        // 6. Convert Markdown blockquotes: > text -> <blockquote>text</blockquote>
+        processedContent = processedContent.replace(
+
+            /^>\s*(.+)$/gm,
+            '<blockquote>$1</blockquote>'
+        );
+
+        // 7. Handle Lists (The fixed logic)
         // Step A: Convert lines starting with "- " or "* " to <li>
         processedContent = processedContent.replace(
             /^[\s]*[-*]\s+(.*)$/gm,
+
             '<li>$1</li>'
+
         );
 
         // Step B: Wrap consecutive <li> items in <ul>
         processedContent = processedContent.replace(
+
             /((?:<li>.*<\/li>(?:\n|$))+)/g,
+
             (match) => {
+
                 // Remove newlines inside the list block so they don't become <br>
+
                 const cleanList = match.replace(/\n/g, "");
+
                 return `<ul>${cleanList}</ul>`;
+
             }
         );
 
-        // 7. Convert remaining newlines to <br> tags
-        processedContent = processedContent.replace(/\n/g, "<br>");
+        // 8. Convert remaining newlines to <br> tags
+                // Avoid adding <br> right after blockquotes and images
+                processedContent = processedContent.replace(/<\/blockquote>\n/g, "</blockquote>");
+                processedContent = processedContent.replace(/(<img[^>]*>)\n/g, "$1");
+                processedContent = processedContent.replace(/\n/g, "<br>");
 
         return processedContent;
     } catch (error) {

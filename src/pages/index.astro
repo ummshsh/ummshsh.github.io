@@ -107,8 +107,13 @@ function getExcerpt(post: any): string | null {
             '<blockquote>$1</blockquote>',
         );
 
-        // Convert line breaks to <br> tags
+
+        // Avoid adding <br> right after blockquotes and images
+        processedContent = processedContent.replace(/<\/blockquote>\n/g, "</blockquote>");
+        processedContent = processedContent.replace(/(<img[^>]*>)\n/g, "$1");
+        // Convert remaining line breaks to <br> tags
         processedContent = processedContent.replace(/\n/g, "<br>");
+
 
         return processedContent;
     } catch (error) {
