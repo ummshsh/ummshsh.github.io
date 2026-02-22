@@ -64,24 +64,29 @@ function getExcerpt(post: any): string | null {
             return null;
         }
 
-        const moreIndex = rawContent.indexOf("<!--more-->");
+        // Remove frontmatter (everything between --- at the start)
+        const withoutFrontmatter = rawContent.replace(/^---[\s\S]*?---\s*/, "");
 
+        const moreIndex = withoutFrontmatter.indexOf("<!--more-->");
+
+        // If there's no explicit excerpt marker, try to surface an iframe embed (Bandcamp, SoundCloud, YouTube)
         if (moreIndex === -1) {
+            const iframeMatch = withoutFrontmatter.match(/<iframe[\s\S]*?<\/iframe>/i);
+            if (iframeMatch) {
+                return iframeMatch[0];
+            }
             return null;
         }
 
         // Extract content before <!--more-->
-        const beforeMore = rawContent.substring(0, moreIndex);
+        const beforeMore = withoutFrontmatter.substring(0, moreIndex);
 
-        // Remove frontmatter (everything between --- at the start)
-        const withoutFrontmatter = beforeMore.replace(/^---[\s\S]*?---\s*/, "");
-
-        if (withoutFrontmatter.trim().length === 0) {
+        if (beforeMore.trim().length === 0) {
             return null;
         }
 
         // Process basic markdown to HTML for images and links
-        let processedContent = withoutFrontmatter.trim();
+        let processedContent = beforeMore.trim();
 
         // Convert markdown images: ![alt](src) -> <img src="src" alt="alt">
         processedContent = processedContent.replace(
