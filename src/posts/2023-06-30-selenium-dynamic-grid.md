@@ -102,8 +102,9 @@ In `grid.runsettings` - this is where you would specify test related parameters 
 ```
 
 <br>
+
 Then we have `config.toml`. This file is just determines mapping between browser and which container should be created by `selenium-node`. Later hub will run tests on contaners specified here.
-```batch
+```yml
 [docker]
 # Configs have a mapping between the Docker image to use and the capabilities that need to be matched to
 # start a container with the given image.
