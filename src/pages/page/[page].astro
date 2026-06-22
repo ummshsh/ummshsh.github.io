@@ -3,33 +3,54 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
 import Pagination from "../../components/Pagination.astro";
 
 export async function getStaticPaths() {
-    // Get all post files directly
     const postFiles = import.meta.glob("../../posts/*.md", { eager: true });
 
-    // Process posts manually (same logic as index.astro)
-    const allPosts = Object.entries(postFiles)
-        .map(([path, file]: [string, any]) => ({
-            file: path,
-            frontmatter: file.frontmatter || {},
-            rawContent: file.rawContent,
-            compiledContent: file.compiledContent,
-            Content: file.Content,
-        }))
-        .filter((post) => !post.frontmatter.hidden)
-        .sort((a, b) => {
-            const getDateFromPath = (path: string) => {
-                const match = path.match(/(\d{4}-\d{1,2}-\d{1,2})/);
-                return match ? match[1] : "";
+    const processedPosts = Object.entries(postFiles)
+        .map(([path, file]: [string, any]) => {
+            let rawContentStr = "";
+            if (typeof file.rawContent === "function") {
+                rawContentStr = file.rawContent();
+            } else if (typeof file.rawContent === "string") {
+                rawContentStr = file.rawContent;
+            }
+
+            const frontmatter = file.frontmatter || {};
+            // Detect microblogs if they don't have a title
+            const isMicro = !frontmatter.title;
+
+            return {
+                isMicro,
+                path,
+                file,
+                frontmatter,
+                rawContentStr,
             };
-            const dateA = getDateFromPath(a.file);
-            const dateB = getDateFromPath(b.file);
-            return dateB.localeCompare(dateA);
-        });
+        })
+        .filter((post) => !post.frontmatter.hidden);
+
+    const getDateTimeFromPath = (path: string) => {
+        const match = path.match(/(\d{4})-(\d{1,2})-(\d{1,2})-(\d{1,2})-(\d{1,2})-(\d{1,2})/);
+        if (match) {
+            const [, year, month, day, hour, minute, second] = match;
+            return `${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}T${hour.padStart(2, "0")}:${minute.padStart(2, "0")}:${second.padStart(2, "0")}`;
+        }
+        const dateMatch = path.match(/(\d{4}-\d{1,2}-\d{1,2})/);
+        if (dateMatch) {
+            const parts = dateMatch[1].split("-");
+            return `${parts[0]}-${parts[1].padStart(2, "0")}-${parts[2].padStart(2, "0")}T00:00:00`;
+        }
+        return "";
+    };
+
+    const allPosts = processedPosts.sort((a, b) => {
+        const dateTimeA = a.frontmatter.date || getDateTimeFromPath(a.path);
+        const dateTimeB = b.frontmatter.date || getDateTimeFromPath(b.path);
+        return dateTimeB.localeCompare(dateTimeA);
+    });
 
     const postsPerPage = 10;
-    const totalPages = Math.ceil(allPosts.length / postsPerPage);
+    const totalPages = Math.ceil(allPosts.length / postsPerPage) || 1;
 
-    // Generate paths for pages 2 and beyond (page 1 is handled by index.astro)
     return Array.from({ length: totalPages - 1 }, (_, i) => {
         const pageNum = i + 2;
         const startIndex = (pageNum - 1) * postsPerPage;
@@ -42,108 +63,80 @@ export async function getStaticPaths() {
                 paginatedPosts,
                 currentPage: pageNum,
                 totalPages,
-                totalPosts: allPosts.length,
-                startIndex,
-                endIndex,
-                allPosts,
             },
         };
     });
 }
 
-const {
-    paginatedPosts,
-    currentPage,
-    totalPages,
-    totalPosts,
-    startIndex,
-    endIndex,
-} = Astro.props;
+const { paginatedPosts, currentPage, totalPages } = Astro.props;
 
-// Helper functions (same as index.astro)
 function getSlugFromPath(path: string): string {
     return path.split("/").pop()?.replace(".md", "") || "";
 }
 
-function getDateFromPath(path: string): string {
-    const match = path.match(/(\d{4}-\d{1,2}-\d{1,2})/);
+function formatTitleFromSlug(slug: string): string {
+    return slug.replace(/^\d{4}-\d{1,2}-\d{1,2}-/, "").replace(/-/g, " ");
+}
+
+function getDateTimeFromPath(path: string): string {
+    const match = path.match(/(\d{4})-(\d{1,2})-(\d{1,2})-(\d{1,2})-(\d{1,2})-(\d{1,2})/);
     if (match) {
-        const parts = match[1].split("-");
-        const year = parts[0];
-        const month = parts[1].padStart(2, "0");
-        const day = parts[2].padStart(2, "0");
-        return `${year}-${month}-${day}`;
+        const [, year, month, day, hour, minute, second] = match;
+        return `${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}T${hour.padStart(2, "0")}:${minute.padStart(2, "0")}:${second.padStart(2, "0")}`;
+    }
+    const dateMatch = path.match(/(\d{4}-\d{1,2}-\d{1,2})/);
+    if (dateMatch) {
+        const parts = dateMatch[1].split("-");
+        return `${parts[0]}-${parts[1].padStart(2, "0")}-${parts[2].padStart(2, "0")}T00:00:00`;
     }
     return "";
 }
 
 function getExcerpt(post: any): string | null {
     try {
-        // Try to access raw content directly from the file object
-        let rawContent = "";
-        if (typeof post.rawContent === "function") {
-            rawContent = post.rawContent();
-        } else if (typeof post.rawContent === "string") {
-            rawContent = post.rawContent;
-        } else {
-            return null;
-        }
+        const rawContent = post.rawContentStr || "";
+        const withoutFrontmatter = rawContent.replace(/^---[\s\S]*?---\s*/, "");
+        const moreIndex = withoutFrontmatter.indexOf("<!--more-->");
 
-        const moreIndex = rawContent.indexOf("<!--more-->");
+        let contentToProcess = "";
 
+        // Show full content if there is no <!--more--> tag
         if (moreIndex === -1) {
-            return null;
+            contentToProcess = withoutFrontmatter;
+        } else {
+            // Otherwise, truncate up to the <!--more--> tag
+            contentToProcess = withoutFrontmatter.substring(0, moreIndex);
         }
 
-        // Extract content before <!--more-->
-        const beforeMore = rawContent.substring(0, moreIndex);
+        if (contentToProcess.trim().length === 0) return null;
 
-        // Remove frontmatter (everything between --- at the start)
-        const withoutFrontmatter = beforeMore.replace(/^---[\s\S]*?---\s*/, "");
+        let processedContent = contentToProcess.trim();
 
-        if (withoutFrontmatter.trim().length === 0) {
-            return null;
-        }
+        processedContent = processedContent.replace(/!\[([^\]]*)\]\(([^)]+)\)/g, '<img src="$2" alt="$1" style="max-width: 100%; height: auto;">');
+        processedContent = processedContent.replace(/\(\:\:([^)]+)\)/g, '<span class="hover-footnote" data-title="$1">*</span>');
+        processedContent = processedContent.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2">$1</a>');
+        processedContent = processedContent.replace(/^>\s*(.+)$/gm, "<blockquote>$1</blockquote>");
 
-        // Process basic markdown to HTML for images and links
-        let processedContent = withoutFrontmatter.trim();
+        processedContent = processedContent.replace(/^[\s]*[-*]\s+(.*)$/gm, "<li>$1</li>");
+        processedContent = processedContent.replace(/((?:<li>.*<\/li>(?:\n|$))+)/g, (match: string) => {
+            const cleanList = match.replace(/\n/g, "");
+            return `<ul>${cleanList}</ul>`;
+        });
 
-        // Convert markdown images: ![alt](src) -> <img src="src" alt="alt">
-        processedContent = processedContent.replace(
-            /!\[([^\]]*)\]\(([^)]+)\)/g,
-            '<img src="$2" alt="$1" style="max-width: 100%; height: auto;">',
-        );
-
-        // Convert tooltip syntax: (::tooltip text) -> <span class="hover-footnote" data-title="tooltip text">*</span>
-        processedContent = processedContent.replace(
-            /\(\:\:([^)]+)\)/g,
-            '<span class="hover-footnote" data-title="$1">*</span>',
-        );
-
-        // Convert markdown links: [text](url) -> <a href="url">text</a>
-        processedContent = processedContent.replace(
-            /\[([^\]]+)\]\(([^)]+)\)/g,
-            '<a href="$2">$1</a>',
-        );
-
-        // Convert markdown blockquotes: > text -> <blockquote>text</blockquote>
-        processedContent = processedContent.replace(
-            /^>\s*(.+)$/gm,
-            '<blockquote>$1</blockquote>',
-        );
-
-
-        // Avoid adding <br> right after blockquotes and images
         processedContent = processedContent.replace(/<\/blockquote>\n/g, "</blockquote>");
         processedContent = processedContent.replace(/(<img[^>]*>)\n/g, "$1");
-        // Convert line breaks to <br> tags
         processedContent = processedContent.replace(/\n/g, "<br>");
-
 
         return processedContent;
     } catch (error) {
         return null;
     }
+}
+
+function hasMoreContent(post: any): boolean {
+    const rawContent = post.rawContentStr || "";
+    const withoutFrontmatter = rawContent.replace(/^---[\s\S]*?---\s*/, "");
+    return withoutFrontmatter.indexOf("<!--more-->") !== -1;
 }
 
 function generatePageUrl(page: number): string {
@@ -153,70 +146,65 @@ function generatePageUrl(page: number): string {
 ---
 
 <BaseLayout title={`Blog - Page ${currentPage}`}>
-    <div class="posts-container">
-        <div class="posts-list">
-            {
-                paginatedPosts.map((post, index) => {
-                    const slug = getSlugFromPath(post.file);
-                    const date = getDateFromPath(post.file);
-                    const excerpt = getExcerpt(post);
-                    const tags = post.frontmatter.tags
-                        ? post.frontmatter.tags.split(" ")
-                        : [];
+    <div class="posts-list">
+        {
+            paginatedPosts.map((post) => {
+                const slug = getSlugFromPath(post.path);
+                const isMicro = post.isMicro;
 
-                    return (
-                        <article class="post-item">
-                            <header class="post-header">
-                                <h2 class="post-title">
-                                    <a href={`/posts/${slug}`}>
-                                        {post.frontmatter.title || slug}
+                const title = isMicro ? `${slug}` : post.frontmatter.title || formatTitleFromSlug(slug);
+                const dateString = post.frontmatter.date || getDateTimeFromPath(post.path);
+                const date = dateString ? dateString.split("T")[0] : null;
+                const tags = isMicro ? ["microblog"] : post.frontmatter.tags ? post.frontmatter.tags.split(" ") : [];
+
+                const excerpt = getExcerpt(post);
+                const showReadMore = hasMoreContent(post);
+
+                return (
+                    <article class="post-item">
+                        <header class="post-header">
+                            <h2 class="post-title">
+                                <a href={`/posts/${slug}`}>{title}</a>
+                            </h2>
+                            {date && (
+                                <time class="post-date" datetime={date}>
+                                    {new Date(date).toLocaleDateString("en-US", {
+                                        year: "numeric",
+                                        month: "long",
+                                        day: "numeric",
+                                    })}
+                                </time>
+                            )}
+                        </header>
+
+                        {tags.length > 0 && (
+                            <div class="post-tags">
+                                {tags.map((tag: string) => (
+                                    <a href={`/tags/${tag}`} class="tag">
+                                        {tag}
                                     </a>
-                                </h2>
-                                {date && (
-                                    <time class="post-date" datetime={date}>
-                                        {new Date(date).toLocaleDateString(
-                                            "en-US",
-                                            {
-                                                year: "numeric",
-                                                month: "long",
-                                                day: "numeric",
-                                            },
-                                        )}
-                                    </time>
-                                )}
-                            </header>
+                                ))}
+                            </div>
+                        )}
 
-                            {tags.length > 0 && (
-                                <div class="post-tags">
-                                    {tags.map((tag) => (
-                                        <a href={`/tags/${tag}`} class="tag">
-                                            {tag}
-                                        </a>
-                                    ))}
-                                </div>
-                            )}
+                        {excerpt && (
+                            <div class="post-preview">
+                                <Fragment set:html={excerpt} />
+                            </div>
+                        )}
 
-                            {excerpt && (
-                                <div class="post-preview">
-                                    <Fragment set:html={excerpt} />
-                                </div>
-                            )}
-
+                        {showReadMore && (
                             <footer class="post-footer">
                                 <a href={`/posts/${slug}`} class="read-more">
                                     Read more
                                 </a>
                             </footer>
-                        </article>
-                    );
-                })
-            }
-        </div>
-
-        <Pagination
-            currentPage={currentPage}
-            totalPages={totalPages}
-            generatePageUrl={generatePageUrl}
-        />
+                        )}
+                    </article>
+                );
+            })
+        }
     </div>
+
+    <Pagination currentPage={currentPage} totalPages={totalPages} generatePageUrl={generatePageUrl} />
 </BaseLayout>

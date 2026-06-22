@@ -13,40 +13,18 @@ import "../styles/global.css";
         <meta charset="UTF-8" />
         <meta name="description" content="Astro description" />
         <meta name="viewport" content="width=device-width" />
-        <link
-            rel="apple-touch-icon"
-            sizes="180x180"
-            href="/assets/images/favicon/apple-touch-icon.png"
-        />
-        <link
-            rel="icon"
-            type="image/png"
-            sizes="32x32"
-            href="/assets/images/favicon/favicon-32x32.png"
-        />
-        <link
-            rel="icon"
-            type="image/png"
-            sizes="16x16"
-            href="/assets/images/favicon/favicon-16x16.png"
-        />
+        <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicon/apple-touch-icon.png" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicon/favicon-32x32.png" />
+        <link rel="icon" type="image/png" sizes="16x16" href="/assets/images/favicon/favicon-16x16.png" />
         <link rel="manifest" href="/assets/images/favicon/site.webmanifest" />
-        <link
-            rel="mask-icon"
-            href="/assets/images/favicon/safari-pinned-tab.svg"
-            color="#5bbad5"
-        />
+        <link rel="mask-icon" href="/assets/images/favicon/safari-pinned-tab.svg" color="#5bbad5" />
         <link rel="shortcut icon" href="/assets/images/favicon/favicon.ico" />
         <meta name="msapplication-TileColor" content="#da532c" />
-        <meta
-            name="msapplication-config"
-            content="/assets/images/favicon/browserconfig.xml"
-        />
+        <meta name="msapplication-config" content="/assets/images/favicon/browserconfig.xml" />
         <meta name="theme-color" content="#ffffff" />
         <meta name="generator" content={Astro.generator} />
         <!-- RSS Feeds -->
         <link rel="alternate" type="application/rss+xml" title="ummshsh - Blog RSS Feed" href="/rss.xml" />
-        <link rel="alternate" type="application/rss+xml" title="ummshsh - Microblog RSS Feed" href="/microblog/rss.xml" />
         <title>{title}</title>
     </head>
     <body>
@@ -54,35 +32,15 @@ import "../styles/global.css";
             <div class="header-container">
                 <div class="header-content">
                     <a href="/" class="logo">
-                        <img
-                            src="/assets/images/logo/loves_vector.svg"
-                            alt="Logo"
-                        />
+                        <img src="/assets/images/logo/loves_vector.svg" alt="Logo" />
                     </a>
-                    <nav class="nav">
-                        <a
-                            href="/"
-                            class={Astro.url.pathname === "/" ? "active" : ""}
-                        >
-                            home
-                        </a>
-                        <a
-                            href="/microblog"
-                            class={Astro.url.pathname === "/microblog"
-                                ? "active"
-                                : ""}
-                        >
-                            microblog
-                        </a>
-                        <a
-                            href="/about"
-                            class={Astro.url.pathname === "/about"
-                                ? "active"
-                                : ""}
-                        >
-                            about
-                        </a>
-                    </nav>
+                    <div class="header-right">
+                        <div id="search" class="header-search"></div>
+                        <nav class="nav">
+                            <a href="/" class={Astro.url.pathname === "/" ? "active" : ""}> posts </a>
+                            <a href="/about" class={Astro.url.pathname === "/about" ? "active" : ""}> about </a>
+                        </nav>
+                    </div>
                 </div>
             </div>
         </header>

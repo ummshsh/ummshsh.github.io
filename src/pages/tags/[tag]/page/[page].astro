@@ -1,9 +1,9 @@
 ---
-import BaseLayout from "../../layouts/BaseLayout.astro";
-import Pagination from "../../components/Pagination.astro";
+import BaseLayout from "../../../../layouts/BaseLayout.astro";
+import Pagination from "../../../../components/Pagination.astro";
 
 export async function getStaticPaths() {
-    const postFiles = import.meta.glob("../../posts/*.md", { eager: true });
+    const postFiles = import.meta.glob("../../../../posts/*.md", { eager: true });
 
     const tagSet = new Set<string>();
     const postsByTag = new Map<string, any[]>();
@@ -30,7 +30,6 @@ export async function getStaticPaths() {
             isMicro,
         };
 
-        // Inject the artificial tag if it's a microblog
         const tags = isMicro ? ["microblog"] : frontmatter.tags ? frontmatter.tags.split(" ") : [];
 
         tags.forEach((tag: string) => {
@@ -42,16 +41,64 @@ export async function getStaticPaths() {
         });
     });
 
-    return Array.from(tagSet).map((tag) => ({
-        params: { tag },
-        props: {
-            tag,
-            posts: postsByTag.get(tag) || [],
-        },
-    }));
+    const getDateTimeFromPath = (path: string) => {
+        const match = path.match(/(\d{4})-(\d{1,2})-(\d{1,2})-(\d{1,2})-(\d{1,2})-(\d{1,2})/);
+        if (match) {
+            const [, year, month, day, hour, minute, second] = match;
+            return `${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}T${hour.padStart(2, "0")}:${minute.padStart(2, "0")}:${second.padStart(2, "0")}`;
+        }
+        const dateMatch = path.match(/(\d{4}-\d{1,2}-\d{1,2})/);
+        if (dateMatch) {
+            const parts = dateMatch[1].split("-");
+            return `${parts[0]}-${parts[1].padStart(2, "0")}-${parts[2].padStart(2, "0")}T00:00:00`;
+        }
+        return "";
+    };
+
+    const paths = [];
+    const postsPerPage = 10;
+
+    // Loop through every tag and generate pages 2, 3, 4, etc.
+    for (const [tag, posts] of postsByTag.entries()) {
+        const sortedPosts = posts.sort((a: any, b: any) => {
+            const dateTimeA = a.frontmatter.date || getDateTimeFromPath(a.path);
+            const dateTimeB = b.frontmatter.date || getDateTimeFromPath(b.path);
+            return dateTimeB.localeCompare(dateTimeA);
+        });
+
+        const totalPages = Math.ceil(sortedPosts.length / postsPerPage) || 1;
+
+        // Start at i=2 because tags/[tag].astro handles page 1
+        for (let i = 2; i <= totalPages; i++) {
+            const startIndex = (i - 1) * postsPerPage;
+            const endIndex = startIndex + postsPerPage;
+
+            paths.push({
+                params: { tag, page: i.toString() },
+                props: {
+                    tag,
+                    paginatedPosts: sortedPosts.slice(startIndex, endIndex),
+                    currentPage: i,
+                    totalPages,
+                    totalPosts: sortedPosts.length,
+                },
+            });
+        }
+    }
+
+    return paths;
 }
 
-const { tag, posts } = Astro.props;
+const { tag, paginatedPosts, currentPage, totalPages, totalPosts } = Astro.props;
+
+// --- Identical helpers as the page 1 layout ---
+function getSlugFromPath(path: string): string {
+    return path.split("/").pop()?.replace(".md", "") || "";
+}
+
+function formatTitleFromSlug(slug: string): string {
+    return slug.replace(/^\d{4}-\d{1,2}-\d{1,2}-/, "").replace(/-/g, " ");
+}
 
 function getDateTimeFromPath(path: string): string {
     const match = path.match(/(\d{4})-(\d{1,2})-(\d{1,2})-(\d{1,2})-(\d{1,2})-(\d{1,2})/);
@@ -65,28 +112,6 @@ function getDateTimeFromPath(path: string): string {
         return `${parts[0]}-${parts[1].padStart(2, "0")}-${parts[2].padStart(2, "0")}T00:00:00`;
     }
     return "";
-}
-
-// Sort posts by date (newest first)
-const sortedPosts = posts.sort((a: any, b: any) => {
-    const dateTimeA = a.frontmatter.date || getDateTimeFromPath(a.path);
-    const dateTimeB = b.frontmatter.date || getDateTimeFromPath(b.path);
-    return dateTimeB.localeCompare(dateTimeA);
-});
-
-// Simple pagination
-const postsPerPage = 10;
-const currentPage = 1;
-const totalPages = Math.ceil(sortedPosts.length / postsPerPage) || 1;
-const paginatedPosts = sortedPosts.slice(0, postsPerPage);
-
-// Helper functions
-function getSlugFromPath(path: string): string {
-    return path.split("/").pop()?.replace(".md", "") || "";
-}
-
-function formatTitleFromSlug(slug: string): string {
-    return slug.replace(/^\d{4}-\d{1,2}-\d{1,2}-/, "").replace(/-/g, " ");
 }
 
 function getExcerpt(post: any): string | null {
@@ -140,15 +165,16 @@ function generatePageUrl(page: number): string {
 }
 ---
 
-<BaseLayout title={`Posts tagged with "${tag}" | ummshsh blog`}>
+<BaseLayout title={`Posts tagged with "${tag}" - Page ${currentPage} | ummshsh blog`}>
     <div class="posts-container">
         <div class="tag-page-header">
             <h1>Posts tagged with <span class="tag-highlight">#{tag}</span></h1>
             <p class="tag-count">
-                {sortedPosts.length} post{sortedPosts.length !== 1 ? "s" : ""} found
+                Page {currentPage} of {totalPages}
             </p>
-            <a href="/" class="back-to-home">← Back to all posts</a>
+            <a href={`/tags/${tag}`} class="back-to-home">← Back to first page</a>
         </div>
+
         <div class="posts-list">
             {
                 paginatedPosts.map((post) => {
