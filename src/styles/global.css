@@ -198,7 +198,9 @@ a:hover {
 
 ::selection {
     background: var(--link-color);
-    color: var(--bg-dark); /* Flipped to bg-dark (white) for readability over blue */
+    color: var(
+        --bg-dark
+    ); /* Flipped to bg-dark (white) for readability over blue */
 }
 ::-moz-selection {
     background: var(--link-color);
