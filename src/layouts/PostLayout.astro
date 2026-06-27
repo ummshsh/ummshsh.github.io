@@ -64,12 +64,16 @@ const date = isMicro ? (dateMatch ? dateMatch[1] : null) : frontmatter.date || (
     </article>
 
     <script>
-        // Process tooltip syntax in post content after page load
         document.addEventListener("DOMContentLoaded", function () {
             const postContent = document.querySelector(".post-content");
-            if (postContent) {
-                postContent.innerHTML = postContent.innerHTML.replace(/\(\:\:([^)]+)\)/g, '<span class="hover-footnote" data-title="$1">*</span>');
-            }
+            if (!postContent) return;
+
+            postContent.innerHTML = postContent.innerHTML.replace(/\(\:\:([^)]+)\)/g, '<span class="hover-footnote" data-title="$1">*</span>');
+
+            postContent.innerHTML = postContent.innerHTML.replace(
+                /<img\s+([^>]*?src="([^"]+)"[^>]*?)>\s*\{\:\.clickableimg\}/g,
+                '<a href="$2" target="_blank" rel="noopener noreferrer"><img $1 class="clickableimg"></a>'
+            );
         });
     </script>
 </BaseLayout>

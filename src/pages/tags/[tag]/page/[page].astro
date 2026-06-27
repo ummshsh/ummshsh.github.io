@@ -132,7 +132,12 @@ function getExcerpt(post: any): string | null {
 
         let processedContent = contentToProcess.trim();
 
-        processedContent = processedContent.replace(/!\[([^\]]*)\]\(([^)]+)\)/g, '<img src="$2" alt="$1" style="max-width: 100%; height: auto;">');
+        processedContent = processedContent.replace(/!\[([^\]]*)\]\(([^)]+)\)(?:\s*\{:\s*\.([a-zA-Z0-9_-]+)\s*\})?/g, (match: string, alt: string, src: string, cls: string) => {
+            if (cls === "clickableimg") {
+                return '<a href="' + src + '" target="_blank" rel="noopener noreferrer"><img src="' + src + '" alt="' + alt + '" class="clickableimg" style="max-width: 100%; height: auto;"></a>';
+            }
+            return '<img src="' + src + '" alt="' + alt + '" style="max-width: 100%; height: auto;">';
+        });
         processedContent = processedContent.replace(/\(\:\:([^)]+)\)/g, '<span class="hover-footnote" data-title="$1">*</span>');
         processedContent = processedContent.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2">$1</a>');
         processedContent = processedContent.replace(/^>\s*(.+)$/gm, "<blockquote>$1</blockquote>");
@@ -145,7 +150,8 @@ function getExcerpt(post: any): string | null {
 
         processedContent = processedContent.replace(/<\/blockquote>\n/g, "</blockquote>");
         processedContent = processedContent.replace(/(<img[^>]*>)\n/g, "$1");
-        processedContent = processedContent.replace(/\n/g, "<br>");
+        processedContent = processedContent.replace(/\n{2,}/g, " <br><br> ");
+        processedContent = processedContent.replace(/\n/g, " ");
 
         return processedContent;
     } catch (error) {
