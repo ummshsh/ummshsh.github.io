@@ -101,8 +101,17 @@ function getExcerpt(post: any): string | null {
 
         processedContent = processedContent.replace(/<\/blockquote>\n/g, "</blockquote>");
         processedContent = processedContent.replace(/(<img[^>]*>)\n/g, "$1");
-        processedContent = processedContent.replace(/\n{2,}/g, " <br><br> ");
-        processedContent = processedContent.replace(/\n/g, " ");
+
+        const blocks = processedContent.split(/\n{2,}/);
+        processedContent = blocks
+            .map((block: string) => {
+                block = block.trim();
+                if (!block) return "";
+                if (block.startsWith("<blockquote>") || block.startsWith("<ul>")) return block;
+                block = block.replace(/\n/g, " ");
+                return "<p>" + block + "</p>";
+            })
+            .join("\n");
 
         return processedContent;
     } catch (error) {

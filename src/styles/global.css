@@ -84,6 +84,10 @@ img {
     border-radius: var(--radius-md);
 }
 
+p img {
+    margin-block: 0.75rem;
+}
+
 video,
 iframe[src*="youtube.com"],
 iframe[src*="youtu.be"],
@@ -325,17 +329,13 @@ main {
 }
 
 .post-preview {
-    color: var(--text);
-    line-height: 1.75;
     margin-block-end: 1rem;
-    font-size: 1.05em;
 }
 
 .post-preview img {
     max-inline-size: 100%;
     block-size: auto;
     border-radius: var(--radius-md);
-    margin-block: 0.75rem;
 }
 
 .read-more {
