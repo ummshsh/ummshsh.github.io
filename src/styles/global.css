@@ -65,11 +65,9 @@ body {
 }
 
 .header-container,
-.posts-container,
 .about-container,
 .microblog-container,
-.post,
-.error-container {
+.post {
     max-inline-size: var(--max-width);
     margin-inline: auto;
     padding-inline: 1.5rem;

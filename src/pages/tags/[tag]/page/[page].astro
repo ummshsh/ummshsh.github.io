@@ -181,75 +181,73 @@ function generatePageUrl(page: number): string {
 ---
 
 <BaseLayout title={`Posts tagged with "${tag}" - Page ${currentPage} | ummshsh blog`}>
-    <div class="posts-container">
-        <div class="tag-page-header">
-            <h1>Posts tagged with <span class="tag-highlight">#{tag}</span></h1>
-            <p class="tag-count">
-                Page {currentPage} of {totalPages}
-            </p>
-            <a href={`/tags/${tag}`} class="back-to-home">← Back to first page</a>
-        </div>
-
-        <div class="posts-list">
-            {
-                paginatedPosts.map((post) => {
-                    const slug = getSlugFromPath(post.path);
-                    const isMicro = post.isMicro;
-
-                    const title = isMicro ? slug.replace(/^(\d{4}-\d{2}-\d{2})-(\d{2})-(\d{2})-\d{2}$/, "$1 $2:$3") : post.frontmatter.title || formatTitleFromSlug(slug);
-                    const dateString = post.frontmatter.date || getDateTimeFromPath(post.path);
-                    const date = dateString ? dateString.split("T")[0] : null;
-                    const tags = isMicro ? ["microblog"] : post.frontmatter.tags ? post.frontmatter.tags.split(" ") : [];
-
-                    const excerpt = getExcerpt(post);
-                    const showReadMore = hasMoreContent(post);
-
-                    return (
-                        <article class="post-item">
-                            <header class="post-header">
-                                <h2 class="post-title">
-                                    <a href={`/posts/${slug}`}>{title}</a>
-                                </h2>
-                                {date && (
-                                    <time class="post-date" datetime={date}>
-                                        {new Date(date).toLocaleDateString("en-US", {
-                                            year: "numeric",
-                                            month: "long",
-                                            day: "numeric",
-                                        })}
-                                    </time>
-                                )}
-                            </header>
-
-                            {tags.length > 0 && (
-                                <div class="post-tags">
-                                    {tags.map((tagName: string) => (
-                                        <a href={`/tags/${tagName}`} class="tag">
-                                            {tagName}
-                                        </a>
-                                    ))}
-                                </div>
-                            )}
-
-                            {excerpt && (
-                                <div class="post-preview">
-                                    <Fragment set:html={excerpt} />
-                                </div>
-                            )}
-
-                            {showReadMore && (
-                                <footer class="post-footer">
-                                    <a href={`/posts/${slug}`} class="read-more">
-                                        Read more
-                                    </a>
-                                </footer>
-                            )}
-                        </article>
-                    );
-                })
-            }
-        </div>
-
-        {totalPages > 1 && <Pagination currentPage={currentPage} totalPages={totalPages} generatePageUrl={generatePageUrl} />}
+    <div class="tag-page-header">
+        <h1>Posts tagged with <span class="tag-highlight">#{tag}</span></h1>
+        <p class="tag-count">
+            Page {currentPage} of {totalPages}
+        </p>
+        <a href={`/tags/${tag}`} class="back-to-home">← Back to first page</a>
     </div>
+
+    <div class="posts-list">
+        {
+            paginatedPosts.map((post) => {
+                const slug = getSlugFromPath(post.path);
+                const isMicro = post.isMicro;
+
+                const title = isMicro ? slug.replace(/^(\d{4}-\d{2}-\d{2})-(\d{2})-(\d{2})-\d{2}$/, "$1 $2:$3") : post.frontmatter.title || formatTitleFromSlug(slug);
+                const dateString = post.frontmatter.date || getDateTimeFromPath(post.path);
+                const date = dateString ? dateString.split("T")[0] : null;
+                const tags = isMicro ? ["microblog"] : post.frontmatter.tags ? post.frontmatter.tags.split(" ") : [];
+
+                const excerpt = getExcerpt(post);
+                const showReadMore = hasMoreContent(post);
+
+                return (
+                    <article class="post-item">
+                        <header class="post-header">
+                            <h2 class="post-title">
+                                <a href={`/posts/${slug}`}>{title}</a>
+                            </h2>
+                            {date && (
+                                <time class="post-date" datetime={date}>
+                                    {new Date(date).toLocaleDateString("en-US", {
+                                        year: "numeric",
+                                        month: "long",
+                                        day: "numeric",
+                                    })}
+                                </time>
+                            )}
+                        </header>
+
+                        {tags.length > 0 && (
+                            <div class="post-tags">
+                                {tags.map((tagName: string) => (
+                                    <a href={`/tags/${tagName}`} class="tag">
+                                        {tagName}
+                                    </a>
+                                ))}
+                            </div>
+                        )}
+
+                        {excerpt && (
+                            <div class="post-preview">
+                                <Fragment set:html={excerpt} />
+                            </div>
+                        )}
+
+                        {showReadMore && (
+                            <footer class="post-footer">
+                                <a href={`/posts/${slug}`} class="read-more">
+                                    Read more
+                                </a>
+                            </footer>
+                        )}
+                    </article>
+                );
+            })
+        }
+    </div>
+
+    {totalPages > 1 && <Pagination currentPage={currentPage} totalPages={totalPages} generatePageUrl={generatePageUrl} />}
 </BaseLayout>
