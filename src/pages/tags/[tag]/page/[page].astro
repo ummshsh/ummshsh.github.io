@@ -187,7 +187,7 @@ function generatePageUrl(page: number): string {
                     const slug = getSlugFromPath(post.path);
                     const isMicro = post.isMicro;
 
-                    const title = isMicro ? `${slug}` : post.frontmatter.title || formatTitleFromSlug(slug);
+                    const title = isMicro ? slug.replace(/^(\d{4}-\d{2}-\d{2})-(\d{2})-(\d{2})-\d{2}$/, "$1 $2:$3") : post.frontmatter.title || formatTitleFromSlug(slug);
                     const dateString = post.frontmatter.date || getDateTimeFromPath(post.path);
                     const date = dateString ? dateString.split("T")[0] : null;
                     const tags = isMicro ? ["microblog"] : post.frontmatter.tags ? post.frontmatter.tags.split(" ") : [];

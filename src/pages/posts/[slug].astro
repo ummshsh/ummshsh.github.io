@@ -21,7 +21,8 @@ const frontmatter = post.frontmatter || {};
 const isMicro = !frontmatter.title;
 
 const cleanSlugTitle = slug.replace(/^\d{4}-\d{1,2}-\d{1,2}-/, "").replace(/-/g, " ");
-const title = isMicro ? `${slug}` : frontmatter.title || cleanSlugTitle;
+const microTitle = slug.replace(/^(\d{4}-\d{2}-\d{2})-(\d{2})-(\d{2})-\d{2}$/, "$1 $2:$3");
+const title = isMicro ? microTitle : frontmatter.title || cleanSlugTitle;
 
 const dateMatch = slug.match(/(\d{4}-\d{1,2}-\d{1,2})/);
 const date = frontmatter.date || (dateMatch ? dateMatch[1] : null);

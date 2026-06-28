@@ -691,7 +691,12 @@ footer {
 
     .header-content {
         flex-direction: column;
+        align-items: center;
         gap: 1.5rem;
+    }
+
+    .header-search {
+        display: none;
     }
 
     .nav {
@@ -707,6 +712,7 @@ footer {
 @media (max-width: 500px) {
     .header-content {
         flex-direction: column;
+        align-items: center;
         gap: 1.25rem;
     }
 }
