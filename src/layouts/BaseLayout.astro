@@ -37,9 +37,18 @@ import "../styles/global.css";
                     <div class="header-right">
                         <div id="search" class="header-search"></div>
                         <nav class="nav">
-                            <a href="/" class={Astro.url.pathname === "/" ? "active" : ""}> posts </a>
-                            <a href="/about" class={Astro.url.pathname === "/about" ? "active" : ""}> about </a>
+                            <a href="/"> posts </a>
+                            <a href="/about"> about </a>
                         </nav>
+                        <script>
+                            const currentPath = window.location.pathname.replace(/\/+$/, '') || '/';
+                            document.querySelectorAll('.nav a').forEach(link => {
+                                const href = link.getAttribute('href');
+                                if (href === currentPath || (href === '/' && currentPath.startsWith('/page'))) {
+                                    link.classList.add('active');
+                                }
+                            });
+                        </script>
                     </div>
                 </div>
             </div>
@@ -49,5 +58,6 @@ import "../styles/global.css";
                 <slot />
             </div>
         </main>
+        <script>import '../scripts/search.ts';</script>
     </body>
 </html>

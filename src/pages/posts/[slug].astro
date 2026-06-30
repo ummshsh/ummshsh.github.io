@@ -1,5 +1,6 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
+import { createMarkdownProcessor } from "@astrojs/markdown-remark";
 
 export async function getStaticPaths() {
     const postFiles = import.meta.glob("../../posts/*.md", { eager: true });
@@ -28,6 +29,23 @@ const dateMatch = slug.match(/(\d{4}-\d{1,2}-\d{1,2})/);
 const date = frontmatter.date || (dateMatch ? dateMatch[1] : null);
 
 const tags = isMicro ? ["microblog"] : frontmatter.tags ? frontmatter.tags.split(" ") : [];
+
+// Pre-process raw markdown to encode special chars in image URLs
+const rawContent = post.rawContent();
+const processedContent = rawContent.replace(
+    /!\[([^\]]*)\]\(((?:[^()]+|\([^()]*\))+)\)(\s*\{:\s*\.\w+\s*\})?/g,
+    (_match: string, alt: string, url: string, cls: string) => {
+        const encoded = url.replace(/\(/g, "%28").replace(/\)/g, "%29").replace(/ /g, "%20");
+        return "![" + alt + "](" + encoded + ")" + (cls || "");
+    }
+);
+const processor = await createMarkdownProcessor({
+    gfm: true,
+    smartypants: true,
+    remarkPlugins: [],
+    rehypePlugins: [],
+});
+const { code: bodyHTML } = await processor.render(processedContent);
 ---
 
 <BaseLayout title={title}>
@@ -60,7 +78,7 @@ const tags = isMicro ? ["microblog"] : frontmatter.tags ? frontmatter.tags.split
         }
 
         <div class="post-content">
-            <post.Content />
+            <Fragment set:html={bodyHTML} />
         </div>
     </article>
 
@@ -75,6 +93,11 @@ const tags = isMicro ? ["microblog"] : frontmatter.tags ? frontmatter.tags.split
                 /<img\s+([^>]*?src="([^"]+)"[^>]*?)>\s*\{\:\.clickableimg\}/g,
                 '<a href="$2" target="_blank" rel="noopener noreferrer"><img $1 class="clickableimg"></a>'
             );
+
+            // URL-encode spaces in image src attributes
+            postContent.querySelectorAll("img").forEach(function(img) {
+                img.src = img.src.replace(/ /g, "%20");
+            });
         });
     </script>
 </BaseLayout>

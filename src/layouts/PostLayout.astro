@@ -74,6 +74,11 @@ const date = isMicro ? (dateMatch ? dateMatch[1] : null) : frontmatter.date || (
                 /<img\s+([^>]*?src="([^"]+)"[^>]*?)>\s*\{\:\.clickableimg\}/g,
                 '<a href="$2" target="_blank" rel="noopener noreferrer"><img $1 class="clickableimg"></a>'
             );
+
+            // URL-encode spaces in image src attributes
+            postContent.querySelectorAll("img").forEach(function(img) {
+                img.src = img.src.replace(/ /g, "%20");
+            });
         });
     </script>
 </BaseLayout>

@@ -112,11 +112,12 @@ function getExcerpt(post: any): string | null {
 
         let processedContent = contentToProcess.trim();
 
-        processedContent = processedContent.replace(/!\[([^\]]*)\]\(([^)]+)\)(?:\s*\{:\s*\.([a-zA-Z0-9_-]+)\s*\})?/g, (match: string, alt: string, src: string, cls: string) => {
+        processedContent = processedContent.replace(/!\[([^\]]*)\]\(((?:[^()]+|\([^()]*\))+)\)(?:\s*\{:\s*\.([a-zA-Z0-9_-]+)\s*\})?/g, (match: string, alt: string, src: string, cls: string) => {
+            const encoded = src.replace(/ /g, '%20').replace(/\(/g, '%28').replace(/\)/g, '%29');
             if (cls === "clickableimg") {
-                return '<a href="' + src + '" target="_blank" rel="noopener noreferrer"><img src="' + src + '" alt="' + alt + '" class="clickableimg" style="max-width: 100%; height: auto;"></a>';
+                return '<a href="' + encoded + '" target="_blank" rel="noopener noreferrer"><img src="' + encoded + '" alt="' + alt + '" class="clickableimg" style="max-width: 100%; height: auto;"></a>';
             }
-            return '<img src="' + src + '" alt="' + alt + '" style="max-width: 100%; height: auto;">';
+            return '<img src="' + encoded + '" alt="' + alt + '" style="max-width: 100%; height: auto;">';
         });
         processedContent = processedContent.replace(/\(\:\:([^)]+)\)/g, '<span class="hover-footnote" data-title="$1">*</span>');
         processedContent = processedContent.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2">$1</a>');
