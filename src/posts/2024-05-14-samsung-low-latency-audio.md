@@ -8,7 +8,7 @@ This is how I tried to debug "poor" audio quality of `Koala` sampler on my Samsu
 *SPOILER: Just don't buy Samsung.*
 
 <!--more-->
-# Koala samler and poor audio quality
+# Koala sampler and poor audio quality
 It is all started from [Koala sampler](https://www.koalasampler.com/).
 
 ![Koala sampler](/assets/images/koala_sampler.jpg)

@@ -1,21 +1,21 @@
 import type { APIRoute } from 'astro';
-import { getAllPosts, getExcerpt, getDateFromFilename } from '../utils/posts';
+import { processPostFiles, sortPosts, getExcerpt, getSlugFromPath, getDateTimeFromPath } from '../utils/posts';
 
 export const GET: APIRoute = async ({ site }) => {
-  // Get all regular posts
   const postFiles = import.meta.glob('../posts/*.md', {
     eager: true,
   });
 
-  const posts = getAllPosts(postFiles);
-  
+  const posts = sortPosts(processPostFiles(postFiles));
+
   // Take latest 100 posts for RSS feed (reasonable limit)
   const recentPosts = posts.slice(0, 100);
 
   const rssItems = recentPosts
     .map((post) => {
-      const slug = post.file.split('/').pop()?.replace('.md', '') || '';
-      const dateStr = getDateFromFilename(post.file);
+      const slug = getSlugFromPath(post.path);
+      const dateTimeStr = post.frontmatter.date || getDateTimeFromPath(post.path);
+      const dateStr = dateTimeStr ? dateTimeStr.split('T')[0] : '';
       const pubDate = dateStr ? new Date(dateStr).toUTCString() : new Date().toUTCString();
       const excerpt = getExcerpt(post);
       const postUrl = `${site}posts/${slug}`;

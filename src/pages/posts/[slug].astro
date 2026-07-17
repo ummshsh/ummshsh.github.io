@@ -1,6 +1,7 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { createMarkdownProcessor } from "@astrojs/markdown-remark";
+import { preprocessMarkdown } from "../../utils/posts";
 
 export async function getStaticPaths() {
     const postFiles = import.meta.glob("../../posts/*.md", { eager: true });
@@ -30,22 +31,18 @@ const date = frontmatter.date || (dateMatch ? dateMatch[1] : null);
 
 const tags = isMicro ? ["microblog"] : frontmatter.tags ? frontmatter.tags.split(" ") : [];
 
-// Pre-process raw markdown to encode special chars in image URLs
+// Pre-process markdown: convert all non-standard syntax (kramdown images,
+// hover footnotes, links, blockquotes, lists) to HTML before the CommonMark
+// processor runs. This prevents HTML blocks from swallowing subsequent markdown.
 const rawContent = post.rawContent();
-const processedContent = rawContent.replace(
-    /!\[([^\]]*)\]\(((?:[^()]+|\([^()]*\))+)\)(\s*\{:\s*\.\w+\s*\})?/g,
-    (_match: string, alt: string, url: string, cls: string) => {
-        const encoded = url.replace(/\(/g, "%28").replace(/\)/g, "%29").replace(/ /g, "%20");
-        return "![" + alt + "](" + encoded + ")" + (cls || "");
-    }
-);
+const preprocessed = preprocessMarkdown(rawContent, true);
 const processor = await createMarkdownProcessor({
     gfm: true,
     smartypants: true,
     remarkPlugins: [],
     rehypePlugins: [],
 });
-const { code: bodyHTML } = await processor.render(processedContent);
+const { code: bodyHTML } = await processor.render(preprocessed);
 ---
 
 <BaseLayout title={title}>
@@ -84,18 +81,8 @@ const { code: bodyHTML } = await processor.render(processedContent);
 
     <script>
         document.addEventListener("DOMContentLoaded", function () {
-            const postContent = document.querySelector(".post-content");
-            if (!postContent) return;
-
-            postContent.innerHTML = postContent.innerHTML.replace(/\(\:\:([^)]+)\)/g, '<span class="hover-footnote" data-title="$1">*</span>');
-
-            postContent.innerHTML = postContent.innerHTML.replace(
-                /<img\s+([^>]*?src="([^"]+)"[^>]*?)>\s*\{\:\.clickableimg\}/g,
-                '<a href="$2" target="_blank" rel="noopener noreferrer"><img $1 class="clickableimg"></a>'
-            );
-
-            // URL-encode spaces in image src attributes
-            postContent.querySelectorAll("img").forEach(function(img) {
+            // URL-encode spaces in image src attributes (safety net)
+            document.querySelectorAll(".post-content img").forEach(function(img) {
                 img.src = img.src.replace(/ /g, "%20");
             });
         });

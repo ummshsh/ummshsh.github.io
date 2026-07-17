@@ -13,41 +13,155 @@ import "../styles/global.css";
         <meta charset="UTF-8" />
         <meta name="description" content="Astro description" />
         <meta name="viewport" content="width=device-width" />
-        <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicon/apple-touch-icon.png" />
-        <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicon/favicon-32x32.png" />
-        <link rel="icon" type="image/png" sizes="16x16" href="/assets/images/favicon/favicon-16x16.png" />
+        <link
+            rel="apple-touch-icon"
+            sizes="180x180"
+            href="/assets/images/favicon/apple-touch-icon.png"
+        />
+        <link
+            rel="icon"
+            type="image/png"
+            sizes="32x32"
+            href="/assets/images/favicon/favicon-32x32.png"
+        />
+        <link
+            rel="icon"
+            type="image/png"
+            sizes="16x16"
+            href="/assets/images/favicon/favicon-16x16.png"
+        />
         <link rel="manifest" href="/assets/images/favicon/site.webmanifest" />
-        <link rel="mask-icon" href="/assets/images/favicon/safari-pinned-tab.svg" color="#5bbad5" />
+        <link
+            rel="mask-icon"
+            href="/assets/images/favicon/safari-pinned-tab.svg"
+            color="#5bbad5"
+        />
         <link rel="shortcut icon" href="/assets/images/favicon/favicon.ico" />
         <meta name="msapplication-TileColor" content="#da532c" />
-        <meta name="msapplication-config" content="/assets/images/favicon/browserconfig.xml" />
+        <meta
+            name="msapplication-config"
+            content="/assets/images/favicon/browserconfig.xml"
+        />
         <meta name="theme-color" content="#121212" />
         <meta name="generator" content={Astro.generator} />
         <!-- RSS Feeds -->
-        <link rel="alternate" type="application/rss+xml" title="ummshsh - Blog RSS Feed" href="/rss.xml" />
+        <link
+            rel="alternate"
+            type="application/rss+xml"
+            title="ummshsh - Blog RSS Feed"
+            href="/rss.xml"
+        />
         <title>{title}</title>
+        <script is:inline>
+            (function () {
+                var saved = localStorage.getItem("theme");
+                var theme =
+                    saved ||
+                    (window.matchMedia("(prefers-color-scheme: light)").matches
+                        ? "light"
+                        : "dark");
+                document.documentElement.setAttribute("data-theme", theme);
+            })();
+        </script>
     </head>
     <body>
         <header>
             <div class="header-container">
                 <div class="header-content">
                     <a href="/" class="logo">
-                        <img src="/assets/images/logo/loves_vector.svg" alt="Logo" />
+                        <img
+                            src="/assets/images/logo/loves_vector.svg"
+                            alt="Logo"
+                        />
                     </a>
                     <div class="header-right">
                         <div id="search" class="header-search"></div>
+                        <button
+                            id="theme-toggle"
+                            class="theme-toggle"
+                            aria-label="Toggle theme"
+                        >
+                            <svg
+                                class="theme-icon-sun"
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="18"
+                                height="18"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                ><circle cx="12" cy="12" r="5"></circle><line
+                                    x1="12"
+                                    y1="1"
+                                    x2="12"
+                                    y2="3"></line><line
+                                    x1="12"
+                                    y1="21"
+                                    x2="12"
+                                    y2="23"></line><line
+                                    x1="4.22"
+                                    y1="4.22"
+                                    x2="5.64"
+                                    y2="5.64"></line><line
+                                    x1="18.36"
+                                    y1="18.36"
+                                    x2="19.78"
+                                    y2="19.78"></line><line
+                                    x1="1"
+                                    y1="12"
+                                    x2="3"
+                                    y2="12"></line><line
+                                    x1="21"
+                                    y1="12"
+                                    x2="23"
+                                    y2="12"></line><line
+                                    x1="4.22"
+                                    y1="19.78"
+                                    x2="5.64"
+                                    y2="18.36"></line><line
+                                    x1="18.36"
+                                    y1="5.64"
+                                    x2="19.78"
+                                    y2="4.22"></line></svg
+                            >
+                            <svg
+                                class="theme-icon-moon"
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="18"
+                                height="18"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                ><path
+                                    d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"
+                                ></path></svg
+                            >
+                        </button>
                         <nav class="nav">
                             <a href="/"> posts </a>
                             <a href="/about"> about </a>
                         </nav>
                         <script>
-                            const currentPath = window.location.pathname.replace(/\/+$/, '') || '/';
-                            document.querySelectorAll('.nav a').forEach(link => {
-                                const href = link.getAttribute('href');
-                                if (href === currentPath || (href === '/' && currentPath.startsWith('/page'))) {
-                                    link.classList.add('active');
-                                }
-                            });
+                            const currentPath =
+                                window.location.pathname.replace(/\/+$/, "") ||
+                                "/";
+                            document
+                                .querySelectorAll(".nav a")
+                                .forEach((link) => {
+                                    const href = link.getAttribute("href");
+                                    if (
+                                        href === currentPath ||
+                                        (href === "/" &&
+                                            currentPath.startsWith("/page"))
+                                    ) {
+                                        link.classList.add("active");
+                                    }
+                                });
                         </script>
                     </div>
                 </div>
@@ -58,6 +172,19 @@ import "../styles/global.css";
                 <slot />
             </div>
         </main>
-        <script>import '../scripts/search.ts';</script>
+        <script>
+            import "../scripts/search.ts";
+
+            const toggle = document.getElementById("theme-toggle");
+            if (toggle) {
+                toggle.addEventListener("click", () => {
+                    const current =
+                        document.documentElement.getAttribute("data-theme");
+                    const next = current === "dark" ? "light" : "dark";
+                    document.documentElement.setAttribute("data-theme", next);
+                    localStorage.setItem("theme", next);
+                });
+            }
+        </script>
     </body>
 </html>

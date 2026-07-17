@@ -79,7 +79,9 @@ function positionDropdown(): void {
 
   dropdownEl.style.position = 'fixed';
   dropdownEl.style.insetInlineStart = rect.left + 'px';
-  dropdownEl.style.inlineSize = Math.max(rect.width, 360) + 'px';
+  const maxDropdownWidth = window.innerWidth - rect.left - 16;
+  const minWidth = rect.width < 200 ? 360 : rect.width;
+  dropdownEl.style.inlineSize = Math.min(minWidth, maxDropdownWidth) + 'px';
 
   if (spaceBelow < dropdownHeight && rect.top > dropdownHeight + 8) {
     dropdownEl.style.top = (rect.top - dropdownHeight - 8) + 'px';

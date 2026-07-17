@@ -9,14 +9,7 @@ export default defineConfig({
   build: {
     format: "file",
   },
-  markdown: {
-    // Handle Jekyll-style liquid syntax gracefully
-    remarkPlugins: [],
-    rehypePlugins: [],
-    // Don't throw on parsing errors
-    gfm: true,
-    smartypants: true,
-  },
+  markdown: {},
   vite: {
     // Configure Vite to handle markdown imports better
     assetsInclude: ["**/*.md"],

@@ -1,61 +1,18 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import Pagination from "../../components/Pagination.astro";
+import { processPostFiles, sortPosts, paginatePosts, getSlugFromPath, formatTitleFromSlug, getDateTimeFromPath, getExcerpt, hasMoreContent } from "../../utils/posts";
 
 export async function getStaticPaths() {
     const postFiles = import.meta.glob("../../posts/*.md", { eager: true });
-
-    const processedPosts = Object.entries(postFiles)
-        .map(([path, file]: [string, any]) => {
-            let rawContentStr = "";
-            if (typeof file.rawContent === "function") {
-                rawContentStr = file.rawContent();
-            } else if (typeof file.rawContent === "string") {
-                rawContentStr = file.rawContent;
-            }
-
-            const frontmatter = file.frontmatter || {};
-            // Detect microblogs if they don't have a title
-            const isMicro = !frontmatter.title;
-
-            return {
-                isMicro,
-                path,
-                file,
-                frontmatter,
-                rawContentStr,
-            };
-        })
-        .filter((post) => !post.frontmatter.hidden);
-
-    const getDateTimeFromPath = (path: string) => {
-        const match = path.match(/(\d{4})-(\d{1,2})-(\d{1,2})-(\d{1,2})-(\d{1,2})-(\d{1,2})/);
-        if (match) {
-            const [, year, month, day, hour, minute, second] = match;
-            return `${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}T${hour.padStart(2, "0")}:${minute.padStart(2, "0")}:${second.padStart(2, "0")}`;
-        }
-        const dateMatch = path.match(/(\d{4}-\d{1,2}-\d{1,2})/);
-        if (dateMatch) {
-            const parts = dateMatch[1].split("-");
-            return `${parts[0]}-${parts[1].padStart(2, "0")}-${parts[2].padStart(2, "0")}T00:00:00`;
-        }
-        return "";
-    };
-
-    const allPosts = processedPosts.sort((a, b) => {
-        const dateTimeA = a.frontmatter.date || getDateTimeFromPath(a.path);
-        const dateTimeB = b.frontmatter.date || getDateTimeFromPath(b.path);
-        return dateTimeB.localeCompare(dateTimeA);
-    });
+    const allPosts = sortPosts(processPostFiles(postFiles));
 
     const postsPerPage = 10;
     const totalPages = Math.ceil(allPosts.length / postsPerPage) || 1;
 
     return Array.from({ length: totalPages - 1 }, (_, i) => {
         const pageNum = i + 2;
-        const startIndex = (pageNum - 1) * postsPerPage;
-        const endIndex = startIndex + postsPerPage;
-        const paginatedPosts = allPosts.slice(startIndex, endIndex);
+        const { paginatedPosts } = paginatePosts(allPosts, pageNum, postsPerPage);
 
         return {
             params: { page: pageNum.toString() },
@@ -69,91 +26,6 @@ export async function getStaticPaths() {
 }
 
 const { paginatedPosts, currentPage, totalPages } = Astro.props;
-
-function getSlugFromPath(path: string): string {
-    return path.split("/").pop()?.replace(".md", "") || "";
-}
-
-function formatTitleFromSlug(slug: string): string {
-    return slug.replace(/^\d{4}-\d{1,2}-\d{1,2}-/, "").replace(/-/g, " ");
-}
-
-function getDateTimeFromPath(path: string): string {
-    const match = path.match(/(\d{4})-(\d{1,2})-(\d{1,2})-(\d{1,2})-(\d{1,2})-(\d{1,2})/);
-    if (match) {
-        const [, year, month, day, hour, minute, second] = match;
-        return `${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}T${hour.padStart(2, "0")}:${minute.padStart(2, "0")}:${second.padStart(2, "0")}`;
-    }
-    const dateMatch = path.match(/(\d{4}-\d{1,2}-\d{1,2})/);
-    if (dateMatch) {
-        const parts = dateMatch[1].split("-");
-        return `${parts[0]}-${parts[1].padStart(2, "0")}-${parts[2].padStart(2, "0")}T00:00:00`;
-    }
-    return "";
-}
-
-function getExcerpt(post: any): string | null {
-    try {
-        const rawContent = post.rawContentStr || "";
-        const withoutFrontmatter = rawContent.replace(/^---[\s\S]*?---\s*/, "");
-        const moreIndex = withoutFrontmatter.indexOf("<!--more-->");
-
-        let contentToProcess = "";
-
-        // Show full content if there is no <!--more--> tag
-        if (moreIndex === -1) {
-            contentToProcess = withoutFrontmatter;
-        } else {
-            // Otherwise, truncate up to the <!--more--> tag
-            contentToProcess = withoutFrontmatter.substring(0, moreIndex);
-        }
-
-        if (contentToProcess.trim().length === 0) return null;
-
-        let processedContent = contentToProcess.trim();
-
-        processedContent = processedContent.replace(/!\[([^\]]*)\]\(((?:[^()]+|\([^()]*\))+)\)(?:\s*\{:\s*\.([a-zA-Z0-9_-]+)\s*\})?/g, (match: string, alt: string, src: string, cls: string) => {
-            const encoded = src.replace(/ /g, '%20').replace(/\(/g, '%28').replace(/\)/g, '%29');
-            if (cls === "clickableimg") {
-                return '<a href="' + encoded + '" target="_blank" rel="noopener noreferrer"><img src="' + encoded + '" alt="' + alt + '" class="clickableimg" style="max-width: 100%; height: auto;"></a>';
-            }
-            return '<img src="' + encoded + '" alt="' + alt + '" style="max-width: 100%; height: auto;">';
-        });
-        processedContent = processedContent.replace(/\(\:\:([^)]+)\)/g, '<span class="hover-footnote" data-title="$1">*</span>');
-        processedContent = processedContent.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2">$1</a>');
-        processedContent = processedContent.replace(/^>\s*(.+)$/gm, "<blockquote>$1</blockquote>");
-
-        processedContent = processedContent.replace(/^[\s]*[-*]\s+(.*)$/gm, "<li>$1</li>");
-        processedContent = processedContent.replace(/((?:<li>.*<\/li>(?:\n|$))+)/g, (match: string) => {
-            const cleanList = match.replace(/\n/g, "");
-            return `<ul>${cleanList}</ul>`;
-        });
-
-        processedContent = processedContent.replace(/<\/blockquote>\n/g, "</blockquote>");
-        processedContent = processedContent.replace(/(<img[^>]*>)\n/g, "$1");
-
-        const blocks = processedContent.split(/\n{2,}/);
-        processedContent = blocks
-            .map((block: string) => {
-                block = block.trim();
-                if (!block) return "";
-                if (block.startsWith("<blockquote>") || block.startsWith("<ul>")) return block;
-                block = block.replace(/\n/g, " ");
-                return "<p>" + block + "</p>";
-            })
-            .join("\n");
-
-        return processedContent;
-    } catch (error) {
-        return null;
-    }
-}
-
-function hasMoreContent(post: any): boolean {
-    const rawContent = post.rawContentStr || "";
-    const withoutFrontmatter = rawContent.replace(/^---[\s\S]*?---\s*/, "");
-    return withoutFrontmatter.indexOf("<!--more-->") !== -1;
-}
 
 function generatePageUrl(page: number): string {
     if (page === 1) return "/";
