@@ -1,5 +1,5 @@
 import type { APIRoute } from 'astro';
-import { processPostFiles, sortPosts, getExcerpt, getSlugFromPath, getDateTimeFromPath } from '../utils/posts';
+import { processPostFiles, sortPosts, getExcerpt, hasMoreContent, getSlugFromPath, getDateTimeFromPath } from '../utils/posts';
 
 export const GET: APIRoute = async ({ site }) => {
   const postFiles = import.meta.glob('../posts/*.md', {
@@ -19,13 +19,14 @@ export const GET: APIRoute = async ({ site }) => {
       const pubDate = dateStr ? new Date(dateStr).toUTCString() : new Date().toUTCString();
       const excerpt = getExcerpt(post);
       const postUrl = `${site}posts/${slug}`;
+      const moreLink = hasMoreContent(post) ? `\n<p><a href="${postUrl}">Read more &raquo;</a></p>` : '';
       
       return `
     <item>
       <title><![CDATA[${post.frontmatter.title || 'Untitled'}]]></title>
       <link>${postUrl}</link>
       <guid>${postUrl}</guid>
-      <description><![CDATA[${excerpt}]]></description>
+      <description><![CDATA[${excerpt}${moreLink}]]></description>
       <pubDate>${pubDate}</pubDate>
       ${post.frontmatter.tags ? `<category>${post.frontmatter.tags}</category>` : ''}
     </item>`;
